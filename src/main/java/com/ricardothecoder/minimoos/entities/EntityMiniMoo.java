@@ -6,7 +6,6 @@ import java.util.Random;
 import com.ricardothecoder.minimoos.Config;
 import com.ricardothecoder.minimoos.References;
 import com.ricardothecoder.minimoos.entities.stats.FluidMooStats;
-import com.ricardothecoder.yac.world.spawn.ISpawnRule;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
