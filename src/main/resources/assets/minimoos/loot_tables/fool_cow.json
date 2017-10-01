@@ -1,0 +1,27 @@
+{
+  "pools": [
+    {
+      "name": "main",
+      "entries": [
+        {
+          "entryName": "minecraft:stone",
+          "weight": 1,
+          "quality": 0,
+          "type": "item",
+          "functions": [
+            {
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "function": "minecraft:set_nbt",
+			  "tag": "{display:{Name:\"A fool's stone\",Lore:[\"You got fooled (again)\"]}}"
+            }
+          ],
+          "name": "minecraft:stone"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

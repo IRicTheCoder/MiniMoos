@@ -1,0 +1,19 @@
+[
+{
+  "modid": "minimoos",
+  "name": "MiniMoos",
+  "description": "Adds small cows to the world, they have special abilities",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": 
+  [
+    "RicardoTheCoder"
+  ],
+  "credits": "All contributors",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": ["YetAnotherCore"]
+}
+]

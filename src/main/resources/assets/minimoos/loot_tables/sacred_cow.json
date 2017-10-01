@@ -1,0 +1,33 @@
+{
+  "pools": [
+    {
+      "name": "main",
+	  "conditions": [
+		{
+			"condition": "minecraft:random_chance",
+			"chance": 0.1
+		}
+	  ],
+      "entries": [
+        {
+          "entryName": "minimoos:goldenessence",
+          "weight": 1,
+          "quality": 0,
+          "type": "item",
+          "functions": [
+            {
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "count": 1.0,
+              "function": "minecraft:looting_enchant"
+            }
+          ],
+          "name": "minimoos:goldenessence"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}
