@@ -15,7 +15,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 
 
-version = "1.0-MC1.10.2"
+version = "1.1-MC1.10.2"
 group= "com.ricardothecoder.minimoos" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "MiniMoos"
 

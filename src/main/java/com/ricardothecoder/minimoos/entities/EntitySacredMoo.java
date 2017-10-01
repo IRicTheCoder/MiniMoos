@@ -37,6 +37,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderHell;
 import net.minecraft.world.WorldProviderSurface;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.Optional;
 
 @Optional.Interface(iface = "com.iamshift.interfaces.IMobChanger", modid = "mineaddons")
@@ -68,14 +69,14 @@ public class EntitySacredMoo extends EntityMiniMoo implements IMobChanger
 	@Override
 	protected void damageEntity(DamageSource damageSrc, float damageAmount)
 	{
-		if (isFool() && damageSrc.getEntity() instanceof EntityPlayer)
+		if (isFool() && damageSrc.getEntity() instanceof EntityPlayer && !(damageSrc.getEntity() instanceof FakePlayer))
 		{
 			foolPlayer((EntityPlayer)damageSrc.getEntity());
 			return;
 		}
 		
 		super.damageEntity(damageSrc, damageAmount);
-		if (damageSrc.getEntity() instanceof EntityPlayer)
+		if (damageSrc.getEntity() instanceof EntityPlayer && !(damageSrc.getEntity() instanceof FakePlayer))
 			((EntityPlayer)damageSrc.getEntity()).addPotionEffect(new PotionEffect(MobEffects.LEVITATION, 60, 0, false, false));
 	}
 	

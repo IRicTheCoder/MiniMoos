@@ -29,6 +29,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
 import net.minecraftforge.common.BiomeDictionary.Type;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.Optional;
 
 @Optional.Interface(iface = "com.iamshift.interfaces.IMobChanger", modid = "mineaddons")
@@ -61,14 +62,14 @@ public class EntityDemonMoo extends EntityMiniMoo implements IMobChanger
 	@Override
 	protected void damageEntity(DamageSource damageSrc, float damageAmount)
 	{
-		if (isFool() && damageSrc.getEntity() instanceof EntityPlayer)
+		if (isFool() && damageSrc.getEntity() instanceof EntityPlayer && !(damageSrc.getEntity() instanceof FakePlayer))
 		{
 			foolPlayer((EntityPlayer)damageSrc.getEntity());
 			return;
 		}
 		
 		super.damageEntity(damageSrc, damageAmount);
-		if (damageSrc.getEntity() instanceof EntityPlayer)
+		if (damageSrc.getEntity() instanceof EntityPlayer && !(damageSrc.getEntity() instanceof FakePlayer))
 			damageSrc.getEntity().setFire(7);
 	}
 	
