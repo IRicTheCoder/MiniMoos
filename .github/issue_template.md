@@ -16,7 +16,7 @@
 - [ ] I have searched for this issue previously and it was either (1) not previously reported, or (2) previously fixed and I'm having the same problem.
 - [ ] I am crashing and can provide my crash report(s)
 <!-->
-<!-- ADDITIONAL INFORMATION - This is optional, but can help finding the problem faster -->
+<!-- ADDITIONAL INFORMATION - This is optional, but can help find the problem faster -->
 ## Additional Information
 - [ ] Java Version:
      - [ ] Java 6
