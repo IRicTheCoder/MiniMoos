@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -83,5 +84,13 @@ public class MiniMoos
 		ModLogger.info(References.NAME, "POST-INITIALIZATION");
 		
 		proxy.registerLaterAddons();
+	}
+	
+	@EventHandler
+	public void serverStart(FMLServerStartingEvent event)
+	{
+		ModLogger.info(References.NAME, "SERVER STARTING");
+		
+		proxy.registerCommands(event);
 	}
 }

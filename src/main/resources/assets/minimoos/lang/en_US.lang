@@ -7,4 +7,10 @@ item.demonsoul.name=Demon Soul
 item.goldenessence.name=Golden Essence
 item.miniwheat.name=Mini Wheat
 
+commands.spawnmoo.usage=/spawnmoo <fluidName> <x> <y> <z>
+commands.spawnmoo.failed=Unable to spawn fluid moo
+commands.spawnmoo.outOfWorld=Can't spawn a moo in unloaded chunks
+commands.spawnmoo.success=Spawned a fluid moo
+
+
 fluid.mfr.milk.still.name.name=Milk

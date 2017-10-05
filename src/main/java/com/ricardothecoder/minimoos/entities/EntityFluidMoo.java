@@ -448,6 +448,7 @@ public class EntityFluidMoo extends EntityMiniMoo
 	public void readFromNBT(NBTTagCompound compound)
 	{
 		super.readFromNBT(compound);
+		
 		stats = new FluidMooStats();
 		
 		stats.readStats(compound);

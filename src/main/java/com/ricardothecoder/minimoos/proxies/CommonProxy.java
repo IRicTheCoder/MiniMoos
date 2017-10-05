@@ -11,6 +11,7 @@ import com.ricardothecoder.minimoos.addons.moofluids.FluidCowConverter;
 import com.ricardothecoder.minimoos.addons.moofluids.MooFluidsPlugin;
 import com.ricardothecoder.minimoos.addons.tconstruct.TConstructPlugin;
 import com.ricardothecoder.minimoos.addons.waila.WailaPlugin;
+import com.ricardothecoder.minimoos.commands.CommandSpawnMoo;
 import com.ricardothecoder.minimoos.entities.EntityDemonMoo;
 import com.ricardothecoder.minimoos.entities.EntityFluidMoo;
 import com.ricardothecoder.minimoos.entities.EntityFoolMoo;
@@ -30,6 +31,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -114,4 +116,9 @@ public class CommonProxy
 	}
 	
 	public void registerRenders() { }
+	
+	public void registerCommands(FMLServerStartingEvent event) 
+	{ 
+		event.registerServerCommand(new CommandSpawnMoo());
+	}
 }
