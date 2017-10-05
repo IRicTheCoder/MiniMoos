@@ -54,6 +54,8 @@ public class MiniMoos
 		
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(References.MODID);
 
+		proxy.registerGamerules();
+		
 		proxy.registerEntities();		
 		proxy.registerLootTables();
 		

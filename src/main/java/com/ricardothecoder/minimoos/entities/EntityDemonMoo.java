@@ -4,7 +4,7 @@ import com.iamshift.interfaces.IMobChanger;
 import com.ricardothecoder.minimoos.Config;
 import com.ricardothecoder.minimoos.References;
 import com.ricardothecoder.minimoos.loot.LootManager;
-import com.ricardothecoder.yac.util.GameruleManager;
+import com.ricardothecoder.yac.world.GameruleManager;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockGravel;
@@ -118,6 +118,9 @@ public class EntityDemonMoo extends EntityMiniMoo implements IMobChanger
 	@Override
 	public boolean getCanSpawnHere()
 	{  
+		if (GameruleManager.getGameRule(worldObj, "spawnMiniMoos").equals("false"))
+			return false;
+		
         return this.worldObj.provider instanceof WorldProviderHell && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox()) && this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !this.worldObj.containsAnyLiquid(this.getEntityBoundingBox());
 	}
 

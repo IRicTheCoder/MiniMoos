@@ -18,25 +18,21 @@ import com.ricardothecoder.minimoos.entities.EntitySacredMoo;
 import com.ricardothecoder.minimoos.items.ItemManager;
 import com.ricardothecoder.minimoos.loot.LootManager;
 import com.ricardothecoder.yac.util.ColorUtil;
-import com.ricardothecoder.yac.util.GameruleManager;
 import com.ricardothecoder.yac.util.SpawnUtil;
+import com.ricardothecoder.yac.world.GameruleManager;
 
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class CommonProxy
 {
