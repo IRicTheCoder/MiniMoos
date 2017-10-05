@@ -57,7 +57,7 @@ dependencies {
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
     //compile "some.group:artifact:version"
-	compile files("libs/YetAnotherCore-1.2-MC1.10.2.jar")
+	compile files("_libs/YetAnotherCore-1.2-MC1.10.2.jar")
       
     // real examples
     //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
@@ -66,12 +66,12 @@ dependencies {
     // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
     provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
 	deobfProvided "cofh:CoFHCore:1.10.2-4.1.12.17:deobf"
-	provided files("libs/appliedenergistics2-rv4-stable-1.jar")
-	provided files("libs/Hwyla-1.8.17-B31_1.10.2.jar")
-	provided files("libs/MineAddons-1.1.jar")
-	provided files("libs/MineFactoryReloaded-[1.10.2]2.9.0B1-229-dev.jar")
-	provided files("libs/MooFluids-1.10.2-1.7.02.12b.jar")
-	provided files("libs/TConstruct-1.10.2-2.6.5.jar")
+	provided files("_libs/appliedenergistics2-rv4-stable-1.jar")
+	provided files("_libs/Hwyla-1.8.17-B31_1.10.2.jar")
+	provided files("_libs/MineAddons-1.1.jar")
+	provided files("_libs/MineFactoryReloaded-[1.10.2]2.9.0B1-229-dev.jar")
+	provided files("_libs/MooFluids-1.10.2-1.7.02.12b.jar")
+	provided files("_libs/TConstruct-1.10.2-2.6.5.jar")
 
     // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
     // except that these dependencies get remapped to your current MCP mappings
