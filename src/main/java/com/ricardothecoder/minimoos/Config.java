@@ -26,6 +26,9 @@ public class Config
 	public static int maxQuantity;
 	public static int maxEfficiency;
 	public static boolean foolMoo;
+	public static int foolRate;
+	public static int sacredRate;
+	public static int demonRate;
 
 	// Fluid Control
 	private static ArrayList<Fluid> spawnableFluidsOver = new ArrayList<Fluid>();
@@ -42,6 +45,7 @@ public class Config
 	// Mine Factory Reloaded Addon
 	public static boolean harvestPenalty;
 	public static boolean areMoosRanchable;
+	public static boolean areExactCopiesAllowed;
 
 	public static void load(File configFile)
 	{
@@ -55,6 +59,9 @@ public class Config
 		maxQuantity = config.getInt("MaxQuantity", "Fluid Moos", 4, 0, 10, "Cow's give buckets based on the quantity they have, what should be the maximum? (0 is Unlimited)");
 		maxEfficiency = config.getInt("MaxEfficiency", "Fluid Moos", 4, 0, 10, "The max use delay is divided by the cow's efficiency, what should be the maximum?  (0 is Unlimited)");
 		foolMoo = config.getBoolean("FoolMoo", "Fluid Moos", true, "Should the Fool Moo be allowed to spawn?");
+		foolRate = config.getInt("FoolRate", "Fluid Moos", 15, 5, 25, "Percentage of Fool Moos being spawned?");
+		sacredRate = config.getInt("SacredWeight", "Fluid Moos", 1, 1, 8, "The weight rate a Sacred Moo should spawn?");
+		demonRate = config.getInt("DemonWeight", "Fluid Moos", 1, 1, 8, "The weight rate a Demon Moo should spawn?");
 
 		allowBreeding = false;
 		noAlloySpawn = false;
@@ -154,6 +161,7 @@ public class Config
 			config.setCategoryComment("MFR Addon", "Controls how the mod reacts with MineAddons");
 			harvestPenalty = config.getBoolean("HarvestPenalty", "MFR Addon", false, "Should there be a penalty on the cooldown when harvesting? (true = twice as long to harvest with a rancher)");
 			areMoosRanchable = config.getBoolean("AreMoosRanchable", "MFR Addon", true, "Should Fluid Moos be ranchable?");
+			areExactCopiesAllowed = config.getBoolean("AreExactCopiesAllowed", "MFR Addon", true, "Should spawning of Exact Copies be Allowed?");
 		}
 	}
 	

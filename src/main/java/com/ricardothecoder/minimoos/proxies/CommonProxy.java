@@ -3,6 +3,7 @@ package com.ricardothecoder.minimoos.proxies;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.ricardothecoder.minimoos.Config;
 import com.ricardothecoder.minimoos.MiniMoos;
 import com.ricardothecoder.minimoos.References;
 import com.ricardothecoder.minimoos.addons.mfr.MFRPlugin;
@@ -75,13 +76,13 @@ public class CommonProxy
 	public void registerSpawns()
 	{
 		SpawnUtil.addSpawnByType(EntityFluidMoo.class, 8, 4, 4, EnumCreatureType.CREATURE, BiomeDictionary.Type.values());
-		SpawnUtil.addSpawnByType(EntityDemonMoo.class, 1, 1, 2, EnumCreatureType.CREATURE, BiomeDictionary.Type.NETHER);
+		SpawnUtil.addSpawnByType(EntityDemonMoo.class, Config.demonRate, 1, 2, EnumCreatureType.CREATURE, BiomeDictionary.Type.NETHER);
 		
 		ArrayList<BiomeDictionary.Type> biome = new ArrayList<BiomeDictionary.Type>();
 		biome.addAll(Arrays.asList(BiomeDictionary.Type.values()));
 		biome.remove(BiomeDictionary.Type.NETHER);
 		biome.remove(BiomeDictionary.Type.END);
-		SpawnUtil.addSpawnByType(EntitySacredMoo.class, 1, 1, 2, EnumCreatureType.CREATURE, biome.toArray(new BiomeDictionary.Type[biome.size()]));
+		SpawnUtil.addSpawnByType(EntitySacredMoo.class, Config.sacredRate, 1, 2, EnumCreatureType.CREATURE, biome.toArray(new BiomeDictionary.Type[biome.size()]));
 	}
 	
 	public void registerEvents() { }

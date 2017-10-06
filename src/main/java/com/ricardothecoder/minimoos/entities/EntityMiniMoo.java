@@ -190,7 +190,7 @@ public class EntityMiniMoo extends EntityCow implements IEntityAdditionalSpawnDa
 	{
 		super.onInitialSpawn(difficulty, livingdata);
 		
-		if (new Random().nextInt(100) <= 15 && !isChild() && !(this instanceof EntityFoolMoo))
+		if (new Random().nextInt(100) <= Config.foolRate && !isChild() && !(this instanceof EntityFoolMoo))
 			isFool = true;
 		
 		return livingdata;

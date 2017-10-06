@@ -60,6 +60,7 @@ public class EntityFluidMoo extends EntityMiniMoo
 		if (stats == null)
 			stats = new FluidMooStats();
 	}
+	
 	private void configureMoo()
 	{
 		if (fluid == null)

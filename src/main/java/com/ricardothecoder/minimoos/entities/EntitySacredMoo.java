@@ -7,6 +7,7 @@ import com.ricardothecoder.minimoos.loot.LootManager;
 import com.ricardothecoder.yac.world.GameruleManager;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockGrass;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
@@ -126,7 +127,12 @@ public class EntitySacredMoo extends EntityMiniMoo implements IMobChanger
 		if (GameruleManager.getGameRule(worldObj, "spawnMiniMoos").equals("false"))
 			return false;
 		
-        return this.worldObj.provider instanceof WorldProviderSurface && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox()) && this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !this.worldObj.containsAnyLiquid(this.getEntityBoundingBox());
+		int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.getEntityBoundingBox().minY);
+        int k = MathHelper.floor_double(this.posZ);
+        BlockPos blockpos = new BlockPos(i, j, k);
+		
+        return this.worldObj.provider instanceof WorldProviderSurface && this.worldObj.getBlockState(blockpos.down()).getBlock() instanceof BlockGrass && this.worldObj.getLight(blockpos) > 8 && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox()) && this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !this.worldObj.containsAnyLiquid(this.getEntityBoundingBox());
 	}
 	
 	// MINE ADDONS
