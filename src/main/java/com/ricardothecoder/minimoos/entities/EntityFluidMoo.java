@@ -1,6 +1,8 @@
 package com.ricardothecoder.minimoos.entities;
 
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -9,6 +11,7 @@ import com.ricardothecoder.minimoos.References;
 import com.ricardothecoder.minimoos.addons.tconstruct.BreedRecipe;
 import com.ricardothecoder.minimoos.entities.stats.FluidMooStats;
 import com.ricardothecoder.minimoos.fluids.FluidColorManager;
+import com.ricardothecoder.minimoos.items.FluidMooCatalogue;
 import com.ricardothecoder.minimoos.items.ItemManager;
 import com.ricardothecoder.yac.world.GameruleManager;
 
@@ -29,10 +32,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
+import net.minecraft.world.WorldProviderSurface;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.Fluid;
@@ -198,6 +203,29 @@ public class EntityFluidMoo extends EntityMiniMoo
 		{
 			foolPlayer(player);
 			return true;
+		}
+		
+		if (stack.getItem() == ItemManager.mooCatalogue)
+		{
+			player.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
+			player.swingArm(hand);
+			
+			String world = "";
+			if (this.worldObj.provider instanceof WorldProviderSurface) world = TextFormatting.GREEN + "Overworld";
+			if (this.worldObj.provider instanceof WorldProviderHell) world = TextFormatting.RED + "Nether";
+			if (this.worldObj.provider instanceof WorldProviderEnd) world = TextFormatting.LIGHT_PURPLE + "End";
+			
+			List<Fluid> endFluids = Arrays.asList(Config.getSpawnableFluids(Type.END));
+			List<Fluid> netherFluids = Arrays.asList(Config.getSpawnableFluids(Type.NETHER));
+			List<Fluid> overworldFluids = Arrays.asList(Config.getSpawnableFluids(Type.MAGICAL));
+			
+			String natural = "";
+			if (endFluids.contains(getFluid())) natural = TextFormatting.LIGHT_PURPLE + "End";
+			if (netherFluids.contains(getFluid())) natural = TextFormatting.RED + "Nether";
+			if (overworldFluids.contains(getFluid())) natural = TextFormatting.GREEN + "Overworld";
+			
+			((FluidMooCatalogue)stack.getItem()).addEntry(getFluid().getLocalizedName(new FluidStack(getFluid(), 0)) + ";none;You found it on the " + world + TextFormatting.WHITE + ". Natural from the " + natural, stack);
+			return false;
 		}
 
 		if (stack.getItem() == ItemManager.demonSoul)  

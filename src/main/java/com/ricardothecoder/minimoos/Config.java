@@ -29,6 +29,7 @@ public class Config
 	public static int foolRate;
 	public static int sacredRate;
 	public static int demonRate;
+	public static int forsakenRate;
 
 	// Fluid Control
 	private static ArrayList<Fluid> spawnableFluidsOver = new ArrayList<Fluid>();
@@ -46,6 +47,8 @@ public class Config
 	public static boolean harvestPenalty;
 	public static boolean areMoosRanchable;
 	public static boolean areExactCopiesAllowed;
+	public static boolean shouldStatsBeCopied;
+	public static int exactCopyPercentage;
 
 	public static void load(File configFile)
 	{
@@ -59,9 +62,10 @@ public class Config
 		maxQuantity = config.getInt("MaxQuantity", "Fluid Moos", 4, 0, 10, "Cow's give buckets based on the quantity they have, what should be the maximum? (0 is Unlimited)");
 		maxEfficiency = config.getInt("MaxEfficiency", "Fluid Moos", 4, 0, 10, "The max use delay is divided by the cow's efficiency, what should be the maximum?  (0 is Unlimited)");
 		foolMoo = config.getBoolean("FoolMoo", "Fluid Moos", true, "Should the Fool Moo be allowed to spawn?");
-		foolRate = config.getInt("FoolRate", "Fluid Moos", 15, 5, 25, "Percentage of Fool Moos being spawned?");
-		sacredRate = config.getInt("SacredWeight", "Fluid Moos", 1, 1, 8, "The weight rate a Sacred Moo should spawn?");
-		demonRate = config.getInt("DemonWeight", "Fluid Moos", 1, 1, 8, "The weight rate a Demon Moo should spawn?");
+		foolRate = config.getInt("FoolRate", "Fluid Moos", 5, 5, 25, "Percentage of Fool Moos being spawned?");
+		sacredRate = config.getInt("SacredWeight", "Fluid Moos", 2, 1, 8, "The weight rate a Sacred Moo should spawn?");
+		demonRate = config.getInt("DemonWeight", "Fluid Moos", 2, 1, 8, "The weight rate a Demon Moo should spawn?");
+		forsakenRate = config.getInt("ForsakenWeight", "Fluid Moos", 2, 1, 8, "The weight rate a Forsaken Moo should spawn?");
 
 		allowBreeding = false;
 		noAlloySpawn = false;
@@ -162,6 +166,8 @@ public class Config
 			harvestPenalty = config.getBoolean("HarvestPenalty", "MFR Addon", false, "Should there be a penalty on the cooldown when harvesting? (true = twice as long to harvest with a rancher)");
 			areMoosRanchable = config.getBoolean("AreMoosRanchable", "MFR Addon", true, "Should Fluid Moos be ranchable?");
 			areExactCopiesAllowed = config.getBoolean("AreExactCopiesAllowed", "MFR Addon", true, "Should spawning of Exact Copies be Allowed?");
+			shouldStatsBeCopied = config.getBoolean("ShouldStatsBeCopied", "MFR Addon", false, "Should Exact Copies also copy the stats?");
+			exactCopyPercentage = config.getInt("ExactCopyPercentage", "MFR Addon", 75, -1, 100, "What is the percentage of spawning an Exact Copy? (-1 to disable)");
 		}
 	}
 	

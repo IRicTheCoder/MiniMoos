@@ -16,10 +16,12 @@ import com.ricardothecoder.minimoos.commands.CommandSpawnMoo;
 import com.ricardothecoder.minimoos.entities.EntityDemonMoo;
 import com.ricardothecoder.minimoos.entities.EntityFluidMoo;
 import com.ricardothecoder.minimoos.entities.EntityFoolMoo;
+import com.ricardothecoder.minimoos.entities.EntityForsakenMoo;
 import com.ricardothecoder.minimoos.entities.EntitySacredMoo;
 import com.ricardothecoder.minimoos.items.ItemManager;
 import com.ricardothecoder.minimoos.loot.LootManager;
 import com.ricardothecoder.yac.util.ColorUtil;
+import com.ricardothecoder.yac.util.EntityUtil;
 import com.ricardothecoder.yac.util.SpawnUtil;
 import com.ricardothecoder.yac.world.GameruleManager;
 
@@ -46,6 +48,7 @@ public class CommonProxy
 	
 	public void registerLootTables()
 	{
+		LootManager.FORSAKEN_COW = LootTableList.register(new ResourceLocation(References.MODID, "forsaken_cow"));
 		LootManager.DEMON_COW = LootTableList.register(new ResourceLocation(References.MODID, "demon_cow"));
 		LootManager.SACRED_COW = LootTableList.register(new ResourceLocation(References.MODID, "sacred_cow"));
 		LootManager.FOOL_COW = LootTableList.register(new ResourceLocation(References.MODID, "fool_cow"));
@@ -55,11 +58,11 @@ public class CommonProxy
 	{
 		int distance = 4;
 		
-		int entityID = 0;
-		EntityRegistry.registerModEntity(EntityFluidMoo.class, "fluidmoo", ++entityID, MiniMoos.instance, distance * 16, 4, true, ColorUtil.getRGBInteger(50, 50, 255), ColorUtil.getRGBInteger(255, 128, 0));
-		EntityRegistry.registerModEntity(EntityFoolMoo.class, "foolmoo", ++entityID, MiniMoos.instance, distance * 16, 4, true, ColorUtil.getRGBInteger(128, 128, 128), ColorUtil.getRGBInteger(255, 50, 50));
-		EntityRegistry.registerModEntity(EntityDemonMoo.class, "demonmoo", ++entityID, MiniMoos.instance, distance * 16, 4, true, ColorUtil.getRGBInteger(255, 128, 0), ColorUtil.getRGBInteger(255, 50, 50));
-		EntityRegistry.registerModEntity(EntitySacredMoo.class, "sacredmoo", ++entityID, MiniMoos.instance, distance * 16, 4, true, ColorUtil.getRGBInteger(50, 50, 255), ColorUtil.getRGBInteger(50, 150, 255));
+		EntityUtil.registerEntity(EntityFluidMoo.class, "fluidmoo", MiniMoos.instance, distance * 16, 4, true, ColorUtil.getRGBInteger(50, 50, 255), ColorUtil.getRGBInteger(255, 128, 0));
+		EntityUtil.registerEntity(EntityFoolMoo.class, "foolmoo", MiniMoos.instance, distance * 16, 4, true, ColorUtil.getRGBInteger(128, 128, 128), ColorUtil.getRGBInteger(255, 50, 50));
+		EntityUtil.registerEntity(EntityDemonMoo.class, "demonmoo", MiniMoos.instance, distance * 16, 4, true, ColorUtil.getRGBInteger(255, 128, 0), ColorUtil.getRGBInteger(255, 50, 50));
+		EntityUtil.registerEntity(EntitySacredMoo.class, "sacredmoo", MiniMoos.instance, distance * 16, 4, true, ColorUtil.getRGBInteger(50, 50, 255), ColorUtil.getRGBInteger(50, 150, 255));
+		EntityUtil.registerEntity(EntityForsakenMoo.class, "forsakenmoo", MiniMoos.instance, distance * 16, 4, true, ColorUtil.getRGBInteger(50, 50, 50), ColorUtil.getRGBInteger(200, 200, 200));
 	}
 	
 	public void registerItems()
@@ -69,13 +72,18 @@ public class CommonProxy
 		GameRegistry.register(ItemManager.demonSoul);
 		GameRegistry.register(ItemManager.goldenEssence);
 		GameRegistry.register(ItemManager.miniWheat);
+		GameRegistry.register(ItemManager.mooCatalogue);
+		GameRegistry.register(ItemManager.creativeMooCatalogue);
+		GameRegistry.register(ItemManager.forsakenFruit);
 		
 		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.miniWheat, 16), new Object[] {Items.WHEAT, Items.BLAZE_POWDER});
+		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.mooCatalogue, 1), new Object[] {Items.BOOK, ItemManager.miniWheat, ItemManager.miniWheat, ItemManager.miniWheat});
 	}
 	
 	public void registerSpawns()
 	{
 		SpawnUtil.addSpawnByType(EntityFluidMoo.class, 8, 4, 4, EnumCreatureType.CREATURE, BiomeDictionary.Type.values());
+		SpawnUtil.addSpawnByType(EntityForsakenMoo.class, Config.forsakenRate, 1, 2, EnumCreatureType.CREATURE, BiomeDictionary.Type.END);
 		SpawnUtil.addSpawnByType(EntityDemonMoo.class, Config.demonRate, 1, 2, EnumCreatureType.CREATURE, BiomeDictionary.Type.NETHER);
 		
 		ArrayList<BiomeDictionary.Type> biome = new ArrayList<BiomeDictionary.Type>();

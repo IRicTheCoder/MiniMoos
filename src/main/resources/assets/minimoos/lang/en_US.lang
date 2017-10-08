@@ -2,15 +2,17 @@ entity.minimoos.fluidmoo.name=Fluid Moo
 entity.minimoos.foolmoo.name=Fool Moo
 entity.minimoos.demonmoo.name=Demon Moo
 entity.minimoos.sacredmoo.name=Sacred Moo
+entity.minimoos.forsakenmoo.name=Forsaken Moo
 
 item.demonsoul.name=Demon Soul
 item.goldenessence.name=Golden Essence
 item.miniwheat.name=Mini Wheat
+item.moocatalogue.name=Fluid Moo Catalogue
+item.moocatalogue.creative.name=Fluid Moo Catalogue - §6Creative Edition
 
 commands.spawnmoo.usage=/spawnmoo <fluidName> <x> <y> <z>
 commands.spawnmoo.failed=Unable to spawn fluid moo
 commands.spawnmoo.outOfWorld=Can't spawn a moo in unloaded chunks
 commands.spawnmoo.success=Spawned a fluid moo
-
 
 fluid.mfr.milk.still.name.name=Milk

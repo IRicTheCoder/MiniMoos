@@ -33,6 +33,9 @@ public class ClientProxy extends CommonProxy
 		ModelLoader.setCustomModelResourceLocation(ItemManager.goldenEssence, 0, new ModelResourceLocation(ItemManager.goldenEssence.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ItemManager.miniWheat, 0, new ModelResourceLocation(ItemManager.miniWheat.getRegistryName(), "inventory"));
 		
+		ModelLoader.setCustomModelResourceLocation(ItemManager.mooCatalogue, 0, new ModelResourceLocation(ItemManager.mooCatalogue.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ItemManager.creativeMooCatalogue, 0, new ModelResourceLocation(ItemManager.mooCatalogue.getRegistryName(), "inventory"));
+		
 		RenderingRegistry.registerEntityRenderingHandler(EntityMiniMoo.class, new IRenderFactory() 
 		{
 			@Override
