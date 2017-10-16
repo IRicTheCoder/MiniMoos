@@ -35,6 +35,6 @@
 ## Reproduce Steps
 
 
-<!-- ADDITIONAL INFORMATION - Please post any crash reports, screenshots, etc. here. (use Pastebin or Imgur accordingly) -->
+<!-- ADDITIONAL INFORMATION - Please post any crash reports, screenshots, etc. here. (use Pastebin or Imgur accordingly). You can also send the .txt of the crash-report if it is too large for paste bin -->
 ## Additional Information
 
