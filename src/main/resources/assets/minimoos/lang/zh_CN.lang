@@ -1,0 +1,18 @@
+entity.minimoos.fluidmoo.name=流体牛
+entity.minimoos.foolmoo.name=傻瓜牛
+entity.minimoos.demonmoo.name=恶魔牛
+entity.minimoos.sacredmoo.name=神圣牛
+entity.minimoos.forsakenmoo.name=不朽牛
+
+item.demonsoul.name=恶魔之魂
+item.goldenessence.name=金色精华
+item.miniwheat.name=迷你小麦
+item.moocatalogue.name=流体牛目录
+item.moocatalogue.creative.name=流体牛目录 - §6创意版
+
+commands.spawnmoo.usage=/spawnmoo <fluidName> <x> <y> <z>
+commands.spawnmoo.failed=无法召唤牛实体
+commands.spawnmoo.outOfWorld=无法在一个未加载的区块中生成牛实体
+commands.spawnmoo.success=成功召唤牛实体
+
+fluid.mfr.milk.still.name.name=牛奶
