@@ -1,5 +1,6 @@
 # ENTITY NAMES
-entity.minimoos.fluidmoo.name=Mini Moo
+entity.minimoos.fluidmoo.name=Fluid Moo
+entity.minimoos.fluidmoo.name.extend=Mini Moo
 entity.minimoos.foolmoo.name=Fool Moo
 entity.minimoos.demonmoo.name=Demon Moo
 entity.minimoos.sacredmoo.name=Sacred Moo

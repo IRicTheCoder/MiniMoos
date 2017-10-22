@@ -66,11 +66,11 @@ public class MiniMoos
 
 		proxy.registerGamerules();
 		
-		proxy.registerEntities();
-		proxy.registerLootTables();
-		
 		proxy.registerItems();
 		proxy.registerRecipes();
+		
+		proxy.registerEntities();
+		proxy.registerLootTables();
 		
 		proxy.registerRenders();
 		

@@ -22,6 +22,10 @@
             {
               "count": 2.0,
               "function": "minecraft:looting_enchant"
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{display:{Lore:[\"Only the best block ever\"]}}"
             }
           ],
           "name": "minecraft:pumpkin"

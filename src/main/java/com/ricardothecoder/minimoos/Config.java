@@ -10,6 +10,7 @@ import com.ricardothecoder.minimoos.addons.tconstruct.AlloyManager;
 import com.ricardothecoder.yac.fluids.FluidManager;
 
 import net.minecraft.item.EnumRarity;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
@@ -74,7 +75,7 @@ public class Config
 
 	// Fluid Control
 	private static boolean resetFluids = true;
-	private static HashMap<Class<? extends WorldProvider>, ArrayList<Fluid>> fluids = new HashMap<Class<? extends WorldProvider>, ArrayList<Fluid>>();
+	private static HashMap<DimensionType, ArrayList<Fluid>> fluids = new HashMap<DimensionType, ArrayList<Fluid>>();
 	public static HashMap<Fluid, Integer> fluidWeight = new HashMap<Fluid, Integer>();
 	public static ArrayList<Fluid> excludedFluids = new ArrayList<Fluid>();
 
@@ -226,17 +227,17 @@ public class Config
 		// Reset Fluids
 		if (resetFluids)
 		{
-			for (String name : References.fluidMap.get(WorldProviderSurface.class))
+			for (String name : References.fluidMap.get(DimensionType.OVERWORLD))
 			{
 				spawnableFluidsOver.add(name);
 			}
 
-			for (String name : References.fluidMap.get(WorldProviderHell.class))
+			for (String name : References.fluidMap.get(DimensionType.NETHER))
 			{
 				spawnableFluidsNether.add(name);
 			}
 
-			for (String name : References.fluidMap.get(WorldProviderEnd.class))
+			for (String name : References.fluidMap.get(DimensionType.THE_END))
 			{
 				spawnableFluidsEnd.add(name);
 			}
@@ -275,9 +276,9 @@ public class Config
 		List<String> fluidNether = Arrays.asList(nether.getStringList());
 		List<String> fluidEnd = Arrays.asList(end.getStringList());
 		
-		fluids.put(WorldProviderSurface.class, new ArrayList<Fluid>());
-		fluids.put(WorldProviderHell.class, new ArrayList<Fluid>());
-		fluids.put(WorldProviderEnd.class, new ArrayList<Fluid>());
+		fluids.put(DimensionType.OVERWORLD, new ArrayList<Fluid>());
+		fluids.put(DimensionType.NETHER, new ArrayList<Fluid>());
+		fluids.put(DimensionType.THE_END, new ArrayList<Fluid>());
 
 		for (Fluid fluid : FluidManager.getContainableFluids())
 		{
@@ -304,19 +305,19 @@ public class Config
 				{
 					if (fluidOverworld.contains(fluid.getName()))
 					{
-						fluids.get(WorldProviderSurface.class).add(fluid);
+						fluids.get(DimensionType.OVERWORLD).add(fluid);
 						continue;
 					}
 					
 					if (fluidNether.contains(fluid.getName()))
 					{
-						fluids.get(WorldProviderHell.class).add(fluid);
+						fluids.get(DimensionType.NETHER).add(fluid);
 						continue;
 					}
 					
 					if (fluidEnd.contains(fluid.getName()))
 					{
-						fluids.get(WorldProviderEnd.class).add(fluid);
+						fluids.get(DimensionType.THE_END).add(fluid);
 						continue;
 					}
 				}
@@ -344,9 +345,9 @@ public class Config
 		}
 	}
 
-	public static Fluid[] getSpawnableFluids(Class<? extends WorldProvider> provider)
+	public static Fluid[] getSpawnableFluids(DimensionType type)
 	{
-		return fluids.get(provider).toArray(new Fluid[0]);
+		return fluids.get(type).toArray(new Fluid[0]);
 	}
 
 	private static boolean canSpawnFluid(Fluid fluid)

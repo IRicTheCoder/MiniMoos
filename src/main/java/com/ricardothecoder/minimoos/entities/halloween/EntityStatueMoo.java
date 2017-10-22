@@ -169,7 +169,10 @@ public class EntityStatueMoo extends EntityMiniMoo
 				return new ResourceLocation(References.MODID, "textures/entity/halloween/byscocow.png");
 			case 0:
 			default:
-				return new ResourceLocation(References.MODID, "textures/entity/halloween/sveniekecow.png");
+				LocalDate date = LocalDate.now();
+				boolean isHalloween = (date.getMonthValue() == 10);
+				
+				return new ResourceLocation(References.MODID, "textures/entity/halloween/" + (isHalloween ? "taintedsveniekecow.png" : "sveniekecow.png"));
 		}
 	}
 	

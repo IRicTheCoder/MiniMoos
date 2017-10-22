@@ -3,7 +3,7 @@ package com.ricardothecoder.minimoos;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.minecraft.world.WorldProvider;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
 import net.minecraft.world.WorldProviderSurface;
@@ -13,18 +13,18 @@ public class References
 	// Mod Information
 	public static final String MODID = "minimoos";
 	public static final String NAME = "MiniMoos";
-    public static final String VERSION = "1.3";
+    public static final String VERSION = "1.3.2";
     public static final int CFG_VERSION = 2;
     
     // Version Control & Dependencies
     public static final String ACCEPTED_VERSION = "[1.10,)";
-    public static final String DEPENDENCIES = "required-after:yac@[1.3,);after:*;";
+    public static final String DEPENDENCIES = "required-after:yac@[1.3.1,);after:*;";
     
     // Debug Info
     public static final boolean DEBUG = false;
     
     // Known Fluids
-    public static final HashMap<Class<? extends WorldProvider>, ArrayList<String>> fluidMap = new HashMap<Class<? extends WorldProvider>, ArrayList<String>>();
+    public static final HashMap<DimensionType, ArrayList<String>> fluidMap = new HashMap<DimensionType, ArrayList<String>>();
     
     static
     {
@@ -50,7 +50,7 @@ public class References
     	fluidsOver.add("clay");
     	fluidsOver.add("blueslime");
     	fluidsOver.add("blood");
-    	fluidMap.put(WorldProviderSurface.class, fluidsOver);
+    	fluidMap.put(DimensionType.OVERWORLD, fluidsOver);
     	
     	// NETHER
     	ArrayList<String> fluidsNether = new ArrayList<String>();
@@ -75,7 +75,7 @@ public class References
     	fluidsNether.add("soularium");
     	fluidsNether.add("pulsatingiron");
     	fluidsNether.add("energeticalloy");
-    	fluidMap.put(WorldProviderHell.class, fluidsNether);
+    	fluidMap.put(DimensionType.NETHER, fluidsNether);
     	
     	// END
     	ArrayList<String> fluidsEnd = new ArrayList<String>();
@@ -88,6 +88,6 @@ public class References
     	fluidsEnd.add("cloud_seed_concentrated");
     	fluidsEnd.add("sacredwater");
     	fluidsEnd.add("nutrient_distillation");
-    	fluidMap.put(WorldProviderEnd.class, fluidsEnd);
+    	fluidMap.put(DimensionType.THE_END, fluidsEnd);
     }
 }

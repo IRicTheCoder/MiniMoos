@@ -7,17 +7,15 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.ricardothecoder.minimoos.Config;
-import com.ricardothecoder.minimoos.MiniMoos;
 import com.ricardothecoder.minimoos.References;
-import com.ricardothecoder.minimoos.addons.mfr.MooMessage;
 import com.ricardothecoder.minimoos.addons.tconstruct.BreedRecipe;
 import com.ricardothecoder.minimoos.feed.FeedRecipe;
 import com.ricardothecoder.minimoos.fluids.FluidColorManager;
 import com.ricardothecoder.minimoos.items.FluidMooCatalogue;
 import com.ricardothecoder.minimoos.items.ItemManager;
+import com.ricardothecoder.yac.util.ModLogger;
 import com.ricardothecoder.yac.world.GameruleManager;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
@@ -40,21 +38,15 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProviderEnd;
-import net.minecraft.world.WorldProviderHell;
-import net.minecraft.world.WorldProviderSurface;
-import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.UniversalBucket;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import scala.util.Random;
 
 public class EntityFluidMoo extends EntityMiniMoo
 {
@@ -192,10 +184,11 @@ public class EntityFluidMoo extends EntityMiniMoo
 	// SPAWN STUFF
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata)
-	{
+	{		
 		IEntityLivingData data = super.onInitialSpawn(difficulty, livingdata);
 
-		setupFluid();
+		if (!worldObj.isRemote)
+			setupFluid();
 
 		return data;
 	}
@@ -204,8 +197,8 @@ public class EntityFluidMoo extends EntityMiniMoo
 	{
 		if (getFluid() == null)
 		{
-			int fluidID = this.rand.nextInt(Config.getSpawnableFluids(this.worldObj.provider.getClass()).length);
-			Fluid fluid = Config.getSpawnableFluids(this.worldObj.provider.getClass())[fluidID];
+			int fluidID = this.rand.nextInt(Config.getSpawnableFluids(this.worldObj.provider.getDimensionType()).length);
+			Fluid fluid = Config.getSpawnableFluids(this.worldObj.provider.getDimensionType())[fluidID];
 
 			setFluid(fluid);
 			configureMoo();
@@ -291,13 +284,13 @@ public class EntityFluidMoo extends EntityMiniMoo
 			if (FeedRecipe.getItemFromFluid(getFluid()) == null)
 			{
 				String world = "";
-				if (this.worldObj.provider instanceof WorldProviderSurface) world = TextFormatting.GREEN + "Overworld";
-				if (this.worldObj.provider instanceof WorldProviderHell) world = TextFormatting.RED + "Nether";
-				if (this.worldObj.provider instanceof WorldProviderEnd) world = TextFormatting.LIGHT_PURPLE + "End";
+				if (this.worldObj.provider.getDimensionType() == DimensionType.OVERWORLD) world = TextFormatting.GREEN + "Overworld";
+				if (this.worldObj.provider.getDimensionType() == DimensionType.NETHER) world = TextFormatting.RED + "Nether";
+				if (this.worldObj.provider.getDimensionType() == DimensionType.THE_END) world = TextFormatting.LIGHT_PURPLE + "End";
 
-				List<Fluid> endFluids = Arrays.asList(Config.getSpawnableFluids(WorldProviderEnd.class));
-				List<Fluid> netherFluids = Arrays.asList(Config.getSpawnableFluids(WorldProviderHell.class));
-				List<Fluid> overworldFluids = Arrays.asList(Config.getSpawnableFluids(WorldProviderSurface.class));
+				List<Fluid> endFluids = Arrays.asList(Config.getSpawnableFluids(DimensionType.THE_END));
+				List<Fluid> netherFluids = Arrays.asList(Config.getSpawnableFluids(DimensionType.NETHER));
+				List<Fluid> overworldFluids = Arrays.asList(Config.getSpawnableFluids(DimensionType.OVERWORLD));
 
 				String natural = "";
 				if (endFluids.contains(getFluid())) natural = TextFormatting.LIGHT_PURPLE + "End";
@@ -625,7 +618,7 @@ public class EntityFluidMoo extends EntityMiniMoo
 		if (hasCustomName())
 			return getCustomNameTag();
 		
-		return getFluid().getLocalizedName(new FluidStack(getFluid(), 0)).replace("Molten ", "").replace("Liquid ", "") + " " + I18n.translateToLocal("entity.minimoos.fluidmoo.name");
+		return getFluid().getLocalizedName(new FluidStack(getFluid(), 0)).replace("Molten ", "").replace("Liquid ", "") + " " + I18n.translateToLocal("entity.minimoos.fluidmoo.name.extend");
 	}
 
 	@Override
@@ -643,10 +636,10 @@ public class EntityFluidMoo extends EntityMiniMoo
 
 		if (this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox()) && this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !this.worldObj.containsAnyLiquid(this.getEntityBoundingBox()))
 		{
-			if (Config.getSpawnableFluids(this.worldObj.provider.getClass()).length > 0)
+			if (Config.getSpawnableFluids(this.worldObj.provider.getDimensionType()).length > 0)
 				return false;
 
-			if ((this.worldObj.provider instanceof WorldProviderHell) || (this.worldObj.provider instanceof WorldProviderEnd))
+			if ((this.worldObj.provider.getDimensionType() == DimensionType.NETHER) || (this.worldObj.provider.getDimensionType() == DimensionType.THE_END))
 				return true;
 			else
 				return state.getBlock() == Blocks.GRASS && this.worldObj.getLight(blockpos) > 8;

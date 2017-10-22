@@ -27,6 +27,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
@@ -136,7 +137,7 @@ public class EntityForsakenMoo extends EntityMiniMoo implements IMobChanger
 		if (GameruleManager.getGameRule(worldObj, "spawnMiniMoos").equals("false"))
 			return false;
 		
-        return this.worldObj.provider instanceof WorldProviderEnd && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox()) && this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !this.worldObj.containsAnyLiquid(this.getEntityBoundingBox());
+        return this.worldObj.provider.getDimensionType() == DimensionType.THE_END && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox()) && this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !this.worldObj.containsAnyLiquid(this.getEntityBoundingBox());
 	}
 
 	// MINE ADDONS

@@ -30,6 +30,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderSurface;
 import net.minecraftforge.common.util.FakePlayer;
@@ -177,7 +178,7 @@ public class EntitySacredMoo extends EntityMiniMoo implements IMobChanger
         int k = MathHelper.floor_double(this.posZ);
         BlockPos blockpos = new BlockPos(i, j, k);
 		
-        return this.worldObj.provider instanceof WorldProviderSurface && this.worldObj.getBlockState(blockpos.down()).getBlock() instanceof BlockGrass && this.worldObj.getLight(blockpos) > 8 && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox()) && this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !this.worldObj.containsAnyLiquid(this.getEntityBoundingBox());
+        return this.worldObj.provider.getDimensionType() == DimensionType.OVERWORLD && this.worldObj.getBlockState(blockpos.down()).getBlock() instanceof BlockGrass && this.worldObj.getLight(blockpos) > 8 && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox()) && this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !this.worldObj.containsAnyLiquid(this.getEntityBoundingBox());
 	}
 	
 	// MINE ADDONS

@@ -8,6 +8,7 @@ import com.ricardothecoder.minimoos.References;
 import com.ricardothecoder.minimoos.feed.FeedRecipe;
 import com.ricardothecoder.yac.fluids.FluidManager;
 import com.ricardothecoder.yac.items.ItemCatalogue;
+import com.ricardothecoder.yac.util.ModLogger;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,13 +16,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProviderEnd;
-import net.minecraft.world.WorldProviderHell;
-import net.minecraft.world.WorldProviderSurface;
-import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 public class FluidMooCatalogue extends ItemCatalogue
@@ -33,13 +30,16 @@ public class FluidMooCatalogue extends ItemCatalogue
 	
 	private void setCreativeEntries(ItemStack stack)
 	{
-		List<Fluid> endFluids = Arrays.asList(Config.getSpawnableFluids(WorldProviderEnd.class));
-		List<Fluid> netherFluids = Arrays.asList(Config.getSpawnableFluids(WorldProviderHell.class));
-		List<Fluid> overworldFluids = Arrays.asList(Config.getSpawnableFluids(WorldProviderSurface.class));
+		List<Fluid> endFluids = Arrays.asList(Config.getSpawnableFluids(DimensionType.THE_END));
+		List<Fluid> netherFluids = Arrays.asList(Config.getSpawnableFluids(DimensionType.NETHER));
+		List<Fluid> overworldFluids = Arrays.asList(Config.getSpawnableFluids(DimensionType.OVERWORLD));
 		
 		for(Fluid fluid : FluidManager.getContainableFluids())
 		{
 			if (Config.excludedFluids.contains(fluid))
+				continue;
+			
+			if (!Config.fluidWeight.containsKey(fluid))
 				continue;
 			
 			int weight = Config.fluidWeight.get(fluid);

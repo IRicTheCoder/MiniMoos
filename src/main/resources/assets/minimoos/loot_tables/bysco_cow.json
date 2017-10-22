@@ -22,6 +22,31 @@
             {
               "count": 2.0,
               "function": "minecraft:looting_enchant"
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{display:{Lore:[\"Oh Great now they don't stack\"]}}"
+            }
+          ],
+          "name": "minecraft:slime_ball"
+        },
+        {
+          "entryName": "minecraft:slime_ball2",
+          "weight": 1,
+          "quality": 0,
+          "type": "item",
+          "functions": [
+            {
+              "count": 2.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "count": 2.0,
+              "function": "minecraft:looting_enchant"
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{display:{Lore:[\"I don't want lore on my slimeballs!\"]}}"
             }
           ],
           "name": "minecraft:slime_ball"
