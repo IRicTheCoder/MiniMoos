@@ -2,9 +2,9 @@ package com.ricardothecoder.minimoos.addons.waila;
 
 import java.util.List;
 
+import com.ricardothecoder.minimoos.Config;
 import com.ricardothecoder.minimoos.References;
 import com.ricardothecoder.minimoos.entities.EntityFluidMoo;
-import com.ricardothecoder.minimoos.entities.stats.FluidMooStats;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaEntityAccessor;
@@ -34,14 +34,17 @@ public class FluidMooProvider implements IWailaEntityProvider
 	@Override
 	public List<String> getWailaBody(Entity entity, List<String> currenttip, IWailaEntityAccessor accessor, IWailaConfigHandler config)
 	{
+		if (!Config.showWailaInfo)
+			return currenttip;
+		
 		if (accessor.getEntity() instanceof EntityFluidMoo) {
 			EntityFluidMoo fluidMoo = (EntityFluidMoo) accessor.getEntity();
 			FluidStack fluidStack = new FluidStack(fluidMoo.getFluid(), 0);
 
-			currenttip.add(TextFormatting.AQUA + "Fluid: " + TextFormatting.WHITE + fluidMoo.getFluid().getLocalizedName(fluidStack) + " (" + fluidMoo.stats.getBuckets() + ")");
+			currenttip.add(TextFormatting.AQUA + "Fluid: " + TextFormatting.WHITE + fluidMoo.getFluid().getLocalizedName(fluidStack) + " (" + fluidMoo.getBuckets() + ")");
 			currenttip.add(TextFormatting.AQUA + "Delay: " + TextFormatting.WHITE + formatTime(fluidMoo.getDelay()));
-			currenttip.add(TextFormatting.AQUA + "Quantity: " + TextFormatting.WHITE + "" + fluidMoo.stats.getQuantity());
-			currenttip.add(TextFormatting.AQUA + "Efficiency: " + TextFormatting.WHITE + "" + fluidMoo.stats.getEfficiency());
+			currenttip.add(TextFormatting.AQUA + "Quantity: " + TextFormatting.WHITE + "" + fluidMoo.getQuantity());
+			currenttip.add(TextFormatting.AQUA + "Efficiency: " + TextFormatting.WHITE + "" + fluidMoo.getEfficiency());
 			
 			if (References.DEBUG)
 				currenttip.add(TextFormatting.AQUA + "Is Fool: " + TextFormatting.WHITE + "" + fluidMoo.isFool());

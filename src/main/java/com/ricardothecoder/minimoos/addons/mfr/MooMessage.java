@@ -24,7 +24,7 @@ public class MooMessage implements IMessage
     {
         this.entityID = moo.getEntityId();
         this.delay = moo.getDelay();
-        this.buckets = moo.stats.getBuckets();
+        this.buckets = moo.getBuckets();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class MooMessage implements IMessage
                     {
                     	EntityFluidMoo moo = (EntityFluidMoo)entity;
                         moo.setDelay(message.delay);
-                        moo.stats.setBuckets(message.buckets);
+                        moo.setBuckets(message.buckets);
                     }
                 }
             }

@@ -1,0 +1,31 @@
+{
+  "pools": [
+    {
+      "name": "main",
+      "entries": [
+        {
+          "entryName": "minecraft:skull",
+          "weight": 1,
+          "quality": 0,
+          "type": "item",
+          "functions": [
+            {
+              "count": 1.0,
+              "function": "minecraft:set_data"
+            },
+            {
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "function": "minecraft:set_nbt",
+			  "tag": "{display:{Lore:[\"Say hello to my little friend.\"]}}"
+            }
+          ],
+          "name": "minecraft:skull"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

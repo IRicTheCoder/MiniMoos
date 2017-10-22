@@ -6,10 +6,13 @@ import com.ricardothecoder.minimoos.entities.EntityFluidMoo;
 import com.ricardothecoder.minimoos.entities.EntityFoolMoo;
 import com.ricardothecoder.minimoos.entities.EntityMiniMoo;
 import com.ricardothecoder.minimoos.entities.EntitySacredMoo;
+import com.ricardothecoder.minimoos.entities.halloween.EntitySpookyMoo;
 import com.ricardothecoder.minimoos.fluids.FluidColorManager;
+import com.ricardothecoder.minimoos.fluids.Fluids;
 import com.ricardothecoder.minimoos.items.ItemManager;
 import com.ricardothecoder.minimoos.models.ModelMiniMoo;
 import com.ricardothecoder.minimoos.renders.RenderMiniMoo;
+import com.ricardothecoder.minimoos.renders.RenderSpookyMoo;
 import com.ricardothecoder.yac.util.ColorUtil;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -26,11 +29,13 @@ public class ClientProxy extends CommonProxy
 {
 	public static FluidColorManager fColorManager;
 	
+	// REGISTER RENDERS
 	@Override
 	public void registerRenders() 
 	{
 		ModelLoader.setCustomModelResourceLocation(ItemManager.demonSoul, 0, new ModelResourceLocation(ItemManager.demonSoul.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ItemManager.goldenEssence, 0, new ModelResourceLocation(ItemManager.goldenEssence.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ItemManager.forsakenFruit, 0, new ModelResourceLocation(ItemManager.forsakenFruit.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ItemManager.miniWheat, 0, new ModelResourceLocation(ItemManager.miniWheat.getRegistryName(), "inventory"));
 		
 		ModelLoader.setCustomModelResourceLocation(ItemManager.mooCatalogue, 0, new ModelResourceLocation(ItemManager.mooCatalogue.getRegistryName(), "inventory"));
@@ -44,8 +49,20 @@ public class ClientProxy extends CommonProxy
 			}
 			
 		});
+		
+		RenderingRegistry.registerEntityRenderingHandler(EntitySpookyMoo.class, new IRenderFactory() 
+		{
+			@Override
+			public Render createRenderFor(RenderManager manager) {
+				return new RenderSpookyMoo(manager, new ModelMiniMoo(), 0.5f);
+			}
+			
+		});
+		
+		Fluids.blockLiquifiedNeutronium.render();
 	}
 	
+	// REGISTER EVENTS
 	@Override
 	public void registerEvents()
 	{

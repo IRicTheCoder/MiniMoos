@@ -1,0 +1,33 @@
+{
+  "pools": [
+    {
+      "name": "main",
+	  "conditions": [
+		{
+			"condition": "minecraft:random_chance",
+			"chance": 0.75
+		}
+	  ],
+      "entries": [
+        {
+          "entryName": "minecraft:pumpkin",
+          "weight": 1,
+          "quality": 0,
+          "type": "item",
+          "functions": [
+            {
+              "count": 6.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "count": 2.0,
+              "function": "minecraft:looting_enchant"
+            }
+          ],
+          "name": "minecraft:pumpkin"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

@@ -1,18 +1,70 @@
-entity.minimoos.fluidmoo.name=Fluid Moo
+# ENTITY NAMES
+entity.minimoos.fluidmoo.name=Mini Moo
 entity.minimoos.foolmoo.name=Fool Moo
 entity.minimoos.demonmoo.name=Demon Moo
 entity.minimoos.sacredmoo.name=Sacred Moo
 entity.minimoos.forsakenmoo.name=Forsaken Moo
 
+entity.minimoos.boss.capone.name=§4Yak Capone
+entity.minimoos.boss.corleone.name=§4Veal Corleone
+entity.minimoos.boss.montana.name=§4Tony Mootana
+entity.minimoos.boss.barzini.name=§4Emilkio Barzini
+entity.minimoos.boss.costello.name=§4Frank Cattlello
+entity.minimoos.boss.scalda.name=§4Big Scalda
+
+entity.minimoos.halloween.spookymoo.name=§5Spooky Moo
+entity.minimoos.halloween.costumemoo.name=§5Costume Moo
+entity.minimoos.halloween.statuemoo.name=§5Statue Moo
+entity.minimoos.halloween.statuemoo.sven.name=§5Svenieke Moo
+entity.minimoos.halloween.statuemoo.bysco.name=§5Bysco Moo
+
+# ITEM NAMES
 item.demonsoul.name=Demon Soul
 item.goldenessence.name=Golden Essence
+item.forsakenfruit.name=§5Forsaken Fruit
 item.miniwheat.name=Mini Wheat
 item.moocatalogue.name=Fluid Moo Catalogue
 item.moocatalogue.creative.name=Fluid Moo Catalogue - §6Creative Edition
 
+# FLUID NAMES
+fluid.mfr.milk.still.name.name=Milk
+fluid.neutronium=§8Liquified Neutronium§r
+
+# COMMANDS
 commands.spawnmoo.usage=/spawnmoo <fluidName> <x> <y> <z>
 commands.spawnmoo.failed=Unable to spawn fluid moo
 commands.spawnmoo.outOfWorld=Can't spawn a moo in unloaded chunks
 commands.spawnmoo.success=Spawned a fluid moo
 
-fluid.mfr.milk.still.name.name=Milk
+# TALKS
+talks.foolmoo.foolplayer=%s just got fooled by a Small Cow!
+
+talks.bossmoo.capone.hat=You tilted my hat boy? Are you blind?
+talks.bossmoo.capone.business=Mind your business, your I will mind you boy!
+talks.bossmoo.capone.protection=Protection isn't free %s!
+
+talks.bossmoo.corleone.what=What are you doing? I should slap you!
+talks.bossmoo.corleone.nice=How nice, %s! I'm afraid I just didn't like it!
+talks.bossmoo.corleone.thisday=A fine day, for a successful business.
+
+talks.bossmoo.montana.finger=%s!! You need people like me so you can point your foolish finger and say that's the bad guy!
+talks.bossmoo.montana.reload=I'M REEELOOOOOAADDDINNNNGGG!
+talks.bossmoo.montana.regeneration=I'm getting you a one way ticket to regeneration.
+
+talks.bossmoo.barzini.alone=Leave me alone, %s! Or I will hunt you down!
+talks.bossmoo.barzini.johnny=Where's Johnny? Out of the way boy!
+talks.bossmoo.barzini.right=Now that's the right answer, %s! Here's a penny.
+
+talks.bossmoo.costello.cigar=HEY %s!! That's my cigar, it was cuban you FOOL!
+talks.bossmoo.costello.war=DO YOU WANT TO START A WAR %s?!?
+talks.bossmoo.costello.street=Look at you, %s! The streets thaugh you nothing, what a noob!
+
+talks.bossmoo.bigscalda.update=Leave me alone %s! I gotta update FoolCraft!
+talks.bossmoo.bigscalda.issue=Another Issue %s? That's like ten thousand already!
+talks.bossmoo.bigscalda.fix=I just fixed something, stop breaking it %s!!
+talks.bossmoo.bigscalda.dead=Take this Iron Golem, I'm Out!
+
+talks.spookymoo.moooh=Moooohhhh! Mooohhhh! Mooohhh!
+
+talks.statuemoo.sven=Bysco, can the statues be made out of pumpkins?
+talks.statuemoo.bysco=Really Sven! This again?!?

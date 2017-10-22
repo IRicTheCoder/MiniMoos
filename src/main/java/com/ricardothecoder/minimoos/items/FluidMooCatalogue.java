@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ricardothecoder.minimoos.Config;
 import com.ricardothecoder.minimoos.References;
+import com.ricardothecoder.minimoos.feed.FeedRecipe;
 import com.ricardothecoder.yac.fluids.FluidManager;
 import com.ricardothecoder.yac.items.ItemCatalogue;
 
@@ -15,6 +16,9 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProviderEnd;
+import net.minecraft.world.WorldProviderHell;
+import net.minecraft.world.WorldProviderSurface;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -29,24 +33,30 @@ public class FluidMooCatalogue extends ItemCatalogue
 	
 	private void setCreativeEntries(ItemStack stack)
 	{
-		List<Fluid> endFluids = Arrays.asList(Config.getSpawnableFluids(Type.END));
-		List<Fluid> netherFluids = Arrays.asList(Config.getSpawnableFluids(Type.NETHER));
-		List<Fluid> overworldFluids = Arrays.asList(Config.getSpawnableFluids(Type.MAGICAL));
+		List<Fluid> endFluids = Arrays.asList(Config.getSpawnableFluids(WorldProviderEnd.class));
+		List<Fluid> netherFluids = Arrays.asList(Config.getSpawnableFluids(WorldProviderHell.class));
+		List<Fluid> overworldFluids = Arrays.asList(Config.getSpawnableFluids(WorldProviderSurface.class));
 		
 		for(Fluid fluid : FluidManager.getContainableFluids())
 		{
-			int weight = 0;
+			if (Config.excludedFluids.contains(fluid))
+				continue;
 			
-			if (endFluids.contains(fluid)) weight = endFluids.lastIndexOf(fluid) - endFluids.indexOf(fluid) + 1;
-			if (netherFluids.contains(fluid)) weight = netherFluids.lastIndexOf(fluid) - netherFluids.indexOf(fluid) + 1;
-			if (overworldFluids.contains(fluid)) weight = overworldFluids.lastIndexOf(fluid) - overworldFluids.indexOf(fluid) + 1;
+			int weight = Config.fluidWeight.get(fluid);
 			
-			String fluidTemp = "";
-			if (fluid.getTemperature() >= FluidRegistry.LAVA.getTemperature()) fluidTemp = TextFormatting.GOLD + "" + fluid.getTemperature();
-			if (fluid.getTemperature() < FluidRegistry.WATER.getTemperature()) fluidTemp = TextFormatting.LIGHT_PURPLE + "" + fluid.getTemperature();
-			if (fluid.getTemperature() >= FluidRegistry.WATER.getTemperature() && fluid.getTemperature() < FluidRegistry.LAVA.getTemperature()) fluidTemp = TextFormatting.GREEN + "" + fluid.getTemperature();
+			String spawnPlace = "";
+			if (netherFluids.contains(fluid)) spawnPlace = TextFormatting.RED + "Nether";
+			if (endFluids.contains(fluid)) spawnPlace = TextFormatting.LIGHT_PURPLE + "End";
+			if (overworldFluids.contains(fluid)) spawnPlace = TextFormatting.GREEN + "Overworld";
 			
-			addEntry(fluid.getLocalizedName(new FluidStack(fluid, 0)) + ";/spawnmoo " + fluid.getName() + ";" + TextFormatting.AQUA + "Temperature: " + fluidTemp + TextFormatting.AQUA + "  Weight: " + TextFormatting.WHITE + weight, stack);
+			addEntry(fluid.getLocalizedName(new FluidStack(fluid, 0)) + ";/spawnmoo " + fluid.getName() + ";" + TextFormatting.AQUA + "Spawns in: " + spawnPlace + TextFormatting.AQUA + ". Weight: " + TextFormatting.WHITE + weight, stack);
+		}
+		
+		for(FeedRecipe recipe : FeedRecipe.recipes.values())
+		{
+			Fluid fluid = recipe.resultFluid;
+			ItemStack feedStack = recipe.getStack();
+			addEntry(fluid.getLocalizedName(new FluidStack(fluid, 0)) + ";/spawnmoo " + fluid.getName() + ";" + TextFormatting.AQUA + "Created by feeding: "  + TextFormatting.GOLD + feedStack.getDisplayName() + TextFormatting.AQUA + ". Chance: " + TextFormatting.WHITE + recipe.chance + "/" + recipe.total, stack);
 		}
 		
 		NBTTagCompound tag = stack.getTagCompound();
@@ -73,7 +83,10 @@ public class FluidMooCatalogue extends ItemCatalogue
 			tooltip.add(TextFormatting.WHITE + "-" + TextFormatting.DARK_GREEN + " Press to spawn moo with fluid");
 		}
 		else
+		{
+			tooltip.add("" + TextFormatting.ITALIC + TextFormatting.YELLOW + "Right click a Fluid Moo to catalogue it");
 			super.addInformation(stack, playerIn, tooltip, advanced);
+		}
 	}
 	
 	@Override

@@ -70,9 +70,9 @@ public class MFRPlugin implements IFactoryRanchable
 			if (items != null)
 			{
 				int delayMultiplier = Config.harvestPenalty ? 2 : 1;
-				if (moo.stats.getBuckets() <= 1)
+				if (moo.getBuckets() <= 1)
 				{
-					moo.setDelay(MathHelper.ceiling_double_int(Config.maxUseDelay / moo.stats.getEfficiency()) * delayMultiplier);
+					moo.setDelay(MathHelper.ceiling_double_int(Config.maxUseDelay / moo.getEfficiency()) * delayMultiplier);
 					moo.decreaseBuckets();
 				}
 				else
@@ -120,6 +120,7 @@ public class MFRPlugin implements IFactoryRanchable
 		
 		MFRPlugin mfr = new MFRPlugin();
 		sendMessage("registerRanchable", mfr);
+		sendMessage("registerSpawnHandler", new FluidMooSpawnHandler());
 		return mfr;
 	}
 	

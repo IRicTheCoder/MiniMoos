@@ -15,10 +15,90 @@
             },
             {
               "function": "minecraft:set_nbt",
-			  "tag": "{display:{Name:\"A fool's stone\",Lore:[\"You got fooled (again)\"]}}"
+			  "tag": "{display:{Name:\"A Fool's Stone\",Lore:[\"You got fooled (again)\"]}}"
             }
           ],
           "name": "minecraft:stone"
+        },
+		{
+          "entryName": "minecraft:diorite",
+          "weight": 1,
+          "quality": 0,
+          "type": "item",
+          "functions": [
+            {
+              "data": 3.0,
+              "function": "minecraft:set_data"
+            },
+			{
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "function": "minecraft:set_nbt",
+			  "tag": "{display:{Name:\"A Fool's Diorite\",Lore:[\"You are fool of iskallium!\"]}}"
+            }
+          ],
+          "name": "minecraft:stone"
+        },
+		{
+          "entryName": "minecraft:andesite",
+          "weight": 1,
+          "quality": 0,
+          "type": "item",
+          "functions": [
+			{
+              "data": 5.0,
+              "function": "minecraft:set_data"
+            },
+            {
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "function": "minecraft:set_nbt",
+			  "tag": "{display:{Name:\"A Fool's Andesite\",Lore:[\"Why so foolish?\"]}}"
+            }
+          ],
+          "name": "minecraft:stone"
+        },
+		{
+          "entryName": "minecraft:granite",
+          "weight": 1,
+          "quality": 0,
+          "type": "item",
+          "functions": [
+			{
+              "data": 1.0,
+              "function": "minecraft:set_data"
+            },
+            {
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "function": "minecraft:set_nbt",
+			  "tag": "{display:{Name:\"A Fool's Granite\",Lore:[\"You foooolll!!!!\"]}}"
+            }
+          ],
+          "name": "minecraft:stone"
+        },
+		{
+          "entryName": "minecraft:dirt",
+          "weight": 1,
+          "quality": 0,
+          "type": "item",
+          "functions": [
+            {
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "function": "minecraft:set_nbt",
+			  "tag": "{display:{Name:\"A Fool's Dirt\",Lore:[\"You look like a...\",\"very nice...\",\"Fool!\"]}}"
+            }
+          ],
+          "name": "minecraft:dirt"
         }
       ],
       "rolls": 1.0

@@ -1,0 +1,37 @@
+{
+  "pools": [
+    {
+      "name": "main",
+	  "conditions": [
+		{
+			"condition": "minecraft:random_chance",
+			"chance": 0.75
+		}
+	  ],
+      "entries": [
+        {
+          "entryName": "minecraft:dye",
+          "weight": 1,
+          "quality": 0,
+          "type": "item",
+          "functions": [
+			{
+              "data": 7.0,
+              "function": "minecraft:set_data"
+            },
+            {
+              "count": 2.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "count": 3.0,
+              "function": "minecraft:looting_enchant"
+            }
+          ],
+          "name": "minecraft:dye"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

@@ -5,9 +5,7 @@ import java.util.Random;
 
 import com.ricardothecoder.minimoos.Config;
 import com.ricardothecoder.minimoos.References;
-import com.ricardothecoder.minimoos.entities.stats.FluidMooStats;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityList;
@@ -28,22 +26,24 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityMiniMoo extends EntityCow implements IEntityAdditionalSpawnData
+public class EntityMiniMoo extends EntityCow
 {
-	private boolean isFool; 
+	private static final DataParameter<Boolean> FOOL_STATE = EntityDataManager.<Boolean>createKey(EntityMiniMoo.class, DataSerializers.BOOLEAN);
+	
 	private boolean foolTriggered;
 	
 	public EntityMiniMoo(World worldIn) 
@@ -71,6 +71,13 @@ public class EntityMiniMoo extends EntityCow implements IEntityAdditionalSpawnDa
 	{
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getBaseValue() * 2);
+	}
+	
+	@Override
+	protected void entityInit()
+	{
+		super.entityInit();
+		this.dataManager.register(FOOL_STATE, Boolean.valueOf(false));
 	}
 	
 	@Override
@@ -130,12 +137,12 @@ public class EntityMiniMoo extends EntityCow implements IEntityAdditionalSpawnDa
 	// FOOL STUFF
 	public boolean isFool()
 	{
-		return Config.foolMoo ? isFool : false;
+		return Config.foolMoo ? this.dataManager.get(FOOL_STATE).booleanValue() : false;
 	}
 	
 	public void setFool(boolean fool)
 	{
-		isFool = fool;
+		this.dataManager.set(FOOL_STATE, Boolean.valueOf(fool));		
 	}
 	
 	public void foolPlayer(EntityPlayer player)
@@ -148,41 +155,32 @@ public class EntityMiniMoo extends EntityCow implements IEntityAdditionalSpawnDa
 		EntityFoolMoo fool = new EntityFoolMoo(worldObj);
 		fool.setPositionAndUpdate(posX, posY, posZ);
 		worldObj.spawnEntityInWorld(fool);
-		
+			
 		if (player != null)
-			player.addChatMessage(new TextComponentString(TextFormatting.GREEN + player.getName() + TextFormatting.WHITE + " just got fooled by a Small Cow!"));
+		{
+			ITextComponent playerName = new TextComponentString(player.getName());
+			playerName.getStyle().setColor(TextFormatting.GREEN);
+			player.addChatMessage(new TextComponentTranslation("talks.foolmoo.foolplayer", playerName));			
+		}
 		
-		isFool = false;
+		setFool(false);
 		foolTriggered = true;
 	}
 	
 	// NBTs & Spawn Data
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound)
+	public void writeEntityToNBT(NBTTagCompound comp)
 	{
-		NBTTagCompound comp = super.writeToNBT(compound);
-		comp.setBoolean("isFool", isFool);
-		return comp;
+		super.writeEntityToNBT(comp);
+		comp.setBoolean("isFool", isFool());
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound)
+	public void readEntityFromNBT(NBTTagCompound compound)
 	{
-		super.readFromNBT(compound);
-		isFool = compound.getBoolean("isFool");
+		super.readEntityFromNBT(compound);
+		setFool(compound.getBoolean("isFool"));
 	}
-	
-	@Override
-	public void writeSpawnData(ByteBuf buffer) 
-	{
-		ByteBufUtils.writeVarInt(buffer, isFool() ? 1 : 0, 4);
-	}
-
-	@Override
-	public void readSpawnData(ByteBuf additionalData) 
-	{		
-		setFool(ByteBufUtils.readVarInt(additionalData, 4) > 0 ? true : false);
-	}	
 	
 	// MISC STUFF
 	@Override
@@ -191,7 +189,7 @@ public class EntityMiniMoo extends EntityCow implements IEntityAdditionalSpawnDa
 		super.onInitialSpawn(difficulty, livingdata);
 		
 		if (new Random().nextInt(100) <= Config.foolRate && !isChild() && !(this instanceof EntityFoolMoo))
-			isFool = true;
+			setFool(true);
 		
 		return livingdata;
 	}

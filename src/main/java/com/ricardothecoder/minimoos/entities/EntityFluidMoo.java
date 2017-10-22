@@ -7,9 +7,11 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.ricardothecoder.minimoos.Config;
+import com.ricardothecoder.minimoos.MiniMoos;
 import com.ricardothecoder.minimoos.References;
+import com.ricardothecoder.minimoos.addons.mfr.MooMessage;
 import com.ricardothecoder.minimoos.addons.tconstruct.BreedRecipe;
-import com.ricardothecoder.minimoos.entities.stats.FluidMooStats;
+import com.ricardothecoder.minimoos.feed.FeedRecipe;
 import com.ricardothecoder.minimoos.fluids.FluidColorManager;
 import com.ricardothecoder.minimoos.items.FluidMooCatalogue;
 import com.ricardothecoder.minimoos.items.ItemManager;
@@ -28,11 +30,15 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderEnd;
@@ -45,15 +51,25 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import scala.util.Random;
 
 public class EntityFluidMoo extends EntityMiniMoo
 {
-	public FluidMooStats stats;
+	private static final DataParameter<String> FLUID_NAME = EntityDataManager.<String>createKey(EntityFluidMoo.class, DataSerializers.STRING);
+	private static final DataParameter<Integer> BUCKET_AMOUNT = EntityDataManager.<Integer>createKey(EntityFluidMoo.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> DELAY = EntityDataManager.<Integer>createKey(EntityFluidMoo.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> QUANTITY = EntityDataManager.<Integer>createKey(EntityFluidMoo.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> EFFICIENCY = EntityDataManager.<Integer>createKey(EntityFluidMoo.class, DataSerializers.VARINT);
+	
+	public final static String FLUID_NAME_ID = "FluidName";
+	public final static String BUCKET_AMOUNT_ID = "BucketAmount";
+	public final static String DELAY_ID = "Delay";
+	public final static String QUANTITY_ID = "Quantity";
+	public final static String EFFICIENCY_ID = "Efficiency";
 
-	private Fluid fluid;
 	private Fluid resultFluid;
 
 	private boolean catchFire;
@@ -62,23 +78,32 @@ public class EntityFluidMoo extends EntityMiniMoo
 	public EntityFluidMoo(World worldIn) 
 	{
 		super(worldIn);
-		if (stats == null)
-			stats = new FluidMooStats();
 	}
-	
+
 	private void configureMoo()
 	{
-		if (fluid == null)
-			setFluid(new Random().nextInt(2) > 0 ? FluidRegistry.LAVA : FluidRegistry.WATER);
+		if (getFluid() == null)
+			setFluid(this.rand.nextInt(2) > 0 ? FluidRegistry.LAVA : FluidRegistry.WATER);
 
 		if (Config.spawnReady)
 			setDelay(0);
 		else
 			setDelay(Config.maxUseDelay);
 
-		catchFire = !(fluid.getTemperature() >= FluidRegistry.LAVA.getTemperature());
+		catchFire = !(getFluid().getTemperature() >= FluidRegistry.LAVA.getTemperature());
 		isImmuneToFire = catchFire;
-		hurtByFall = !(fluid.isGaseous());
+		hurtByFall = !(getFluid().isGaseous());
+	}
+	
+	@Override
+	protected void entityInit()
+	{
+		super.entityInit();
+		this.dataManager.register(FLUID_NAME, String.valueOf("None"));
+		this.dataManager.register(BUCKET_AMOUNT, Integer.valueOf(1));
+		this.dataManager.register(DELAY, Integer.valueOf(0));
+		this.dataManager.register(QUANTITY, Integer.valueOf(1));
+		this.dataManager.register(EFFICIENCY, Integer.valueOf(1));
 	}
 
 	// VALUES MANIPULATION
@@ -89,36 +114,68 @@ public class EntityFluidMoo extends EntityMiniMoo
 			setupFluid();
 			return;
 		}
-		
-		fluid = cowFluid;
-		stats.setFluidName(cowFluid.getName());
 
-		catchFire = !(fluid.getTemperature() >= FluidRegistry.LAVA.getTemperature());
+		this.dataManager.set(FLUID_NAME, cowFluid.getName());
+
+		catchFire = !(getFluid().getTemperature() >= FluidRegistry.LAVA.getTemperature());
 		isImmuneToFire = catchFire;
-		hurtByFall = !(fluid.isGaseous());
+		hurtByFall = !(getFluid().isGaseous());
 	}
 
 	public Fluid getFluid()
 	{
-		return fluid;
+		if (this.dataManager.get(FLUID_NAME).toString().equals("None"))
+			return null;
+		
+		return FluidRegistry.getFluid(this.dataManager.get(FLUID_NAME).toString());
 	}
 
 	public void setDelay(int newDelay)
 	{
-		stats.setDelay(newDelay);
+		this.dataManager.set(DELAY, Integer.valueOf(newDelay));
 
 		if (newDelay <= 0)
-			stats.setBuckets(stats.getQuantity());
+			setBuckets(getQuantity());
 	}
 
 	public int getDelay()
 	{
-		return stats.getDelay();
+		return this.dataManager.get(DELAY).intValue();
+	}
+	
+	public void setBuckets(int buckets)
+	{
+		this.dataManager.set(BUCKET_AMOUNT, Integer.valueOf(buckets));
+	}
+	
+	public int getBuckets()
+	{		
+		return this.dataManager.get(BUCKET_AMOUNT).intValue();
 	}
 
 	public void decreaseBuckets()
 	{
-		stats.setBuckets(stats.getBuckets() - 1);
+		setBuckets(getBuckets() - 1);
+	}
+	
+	public void setQuantity(int quantity)
+	{
+		this.dataManager.set(QUANTITY, Integer.valueOf(quantity));
+	}
+	
+	public int getQuantity()
+	{
+		return this.dataManager.get(QUANTITY).intValue();
+	}
+	
+	public void setEfficiency(int efficiency)
+	{
+		this.dataManager.set(EFFICIENCY, Integer.valueOf(efficiency));
+	}
+	
+	public int getEfficiency()
+	{
+		return this.dataManager.get(EFFICIENCY).intValue();
 	}
 
 	// ENTITY CONTROL
@@ -126,44 +183,30 @@ public class EntityFluidMoo extends EntityMiniMoo
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 
-		if (stats.getDelay() > 0) {
-			setDelay(stats.getDelay() - 1);
+		if (getDelay() > 0) {
+			setDelay(getDelay() - 1);
 		}
 	}
-	
-	
+
+
 	// SPAWN STUFF
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata)
 	{
 		IEntityLivingData data = super.onInitialSpawn(difficulty, livingdata);
-		
+
 		setupFluid();
-		
+
 		return data;
 	}
-	
+
 	private void setupFluid()
 	{
 		if (getFluid() == null)
 		{
-			stats = new FluidMooStats();
-			
-			int fluidID = new Random().nextInt(Config.getSpawnableFluids(Type.MAGICAL).length);
-			Fluid fluid = Config.getSpawnableFluids(Type.MAGICAL)[fluidID];
-			
-			if (this.worldObj.provider instanceof WorldProviderEnd)
-			{
-				fluidID = new Random().nextInt(Config.getSpawnableFluids(Type.END).length);
-				fluid = Config.getSpawnableFluids(Type.END)[fluidID];
-			}
-			
-			if (this.worldObj.provider instanceof WorldProviderHell)
-			{
-				fluidID = new Random().nextInt(Config.getSpawnableFluids(Type.NETHER).length);
-				fluid = Config.getSpawnableFluids(Type.NETHER)[fluidID];
-			}
-			
+			int fluidID = this.rand.nextInt(Config.getSpawnableFluids(this.worldObj.provider.getClass()).length);
+			Fluid fluid = Config.getSpawnableFluids(this.worldObj.provider.getClass())[fluidID];
+
 			setFluid(fluid);
 			configureMoo();
 		}
@@ -178,7 +221,7 @@ public class EntityFluidMoo extends EntityMiniMoo
 			if (isBreedingItem(stack) && Config.allowBreeding)
 			{
 				player.playSound(SoundEvents.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
-				
+
 				this.ageUp((int)((float)(-this.getGrowingAge() / 20) * 0.1F), true);
 				player.swingArm(hand);
 
@@ -192,55 +235,98 @@ public class EntityFluidMoo extends EntityMiniMoo
 
 				return true;
 			}
-			
+
 			return false;
 		}
-		
+
 		if (stack == null)
 			return false;
 
-		if (this.isFool() && stack.getItem() != Items.SPAWN_EGG)
+		if (this.isFool() && validItem(stack))
 		{
 			foolPlayer(player);
 			return true;
 		}
-		
+
+		if (FeedRecipe.recipes.containsKey(stack.getItem()))
+		{
+			FeedRecipe recipe = FeedRecipe.recipes.get(stack.getItem());
+
+			if (stack.getMetadata() == recipe.meta && !getFluid().getName().equals(recipe.resultFluid.getName()))
+			{
+				if (this.rand.nextInt(recipe.total) <= recipe.chance)
+				{
+					setFluid(recipe.resultFluid);
+				}
+
+				if (!player.capabilities.isCreativeMode)
+				{
+					setDelay(MathHelper.ceiling_double_int(Config.maxUseDelay / getEfficiency()));
+
+					if (stack.stackSize > 1)
+					{
+						ItemStack newStack = stack.copy();
+						newStack.stackSize -= 1;
+						player.setHeldItem(hand, newStack);
+					}
+					else
+						player.setHeldItem(hand, null);
+				}
+
+				return true;
+			}
+		}
+
 		if (stack.getItem() == ItemManager.mooCatalogue)
 		{
+			if (stack.hasTagCompound() && stack.getTagCompound().hasKey("owner"))
+			{
+				if (!stack.getTagCompound().getString("owner").equals(player.getName()))
+					return true;
+			}
+
 			player.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
 			player.swingArm(hand);
-			
-			String world = "";
-			if (this.worldObj.provider instanceof WorldProviderSurface) world = TextFormatting.GREEN + "Overworld";
-			if (this.worldObj.provider instanceof WorldProviderHell) world = TextFormatting.RED + "Nether";
-			if (this.worldObj.provider instanceof WorldProviderEnd) world = TextFormatting.LIGHT_PURPLE + "End";
-			
-			List<Fluid> endFluids = Arrays.asList(Config.getSpawnableFluids(Type.END));
-			List<Fluid> netherFluids = Arrays.asList(Config.getSpawnableFluids(Type.NETHER));
-			List<Fluid> overworldFluids = Arrays.asList(Config.getSpawnableFluids(Type.MAGICAL));
-			
-			String natural = "";
-			if (endFluids.contains(getFluid())) natural = TextFormatting.LIGHT_PURPLE + "End";
-			if (netherFluids.contains(getFluid())) natural = TextFormatting.RED + "Nether";
-			if (overworldFluids.contains(getFluid())) natural = TextFormatting.GREEN + "Overworld";
-			
-			((FluidMooCatalogue)stack.getItem()).addEntry(getFluid().getLocalizedName(new FluidStack(getFluid(), 0)) + ";none;You found it on the " + world + TextFormatting.WHITE + ". Natural from the " + natural, stack);
+
+			if (FeedRecipe.getItemFromFluid(getFluid()) == null)
+			{
+				String world = "";
+				if (this.worldObj.provider instanceof WorldProviderSurface) world = TextFormatting.GREEN + "Overworld";
+				if (this.worldObj.provider instanceof WorldProviderHell) world = TextFormatting.RED + "Nether";
+				if (this.worldObj.provider instanceof WorldProviderEnd) world = TextFormatting.LIGHT_PURPLE + "End";
+
+				List<Fluid> endFluids = Arrays.asList(Config.getSpawnableFluids(WorldProviderEnd.class));
+				List<Fluid> netherFluids = Arrays.asList(Config.getSpawnableFluids(WorldProviderHell.class));
+				List<Fluid> overworldFluids = Arrays.asList(Config.getSpawnableFluids(WorldProviderSurface.class));
+
+				String natural = "";
+				if (endFluids.contains(getFluid())) natural = TextFormatting.LIGHT_PURPLE + "End";
+				if (netherFluids.contains(getFluid())) natural = TextFormatting.RED + "Nether";
+				if (overworldFluids.contains(getFluid())) natural = TextFormatting.GREEN + "Overworld";
+
+				((FluidMooCatalogue)stack.getItem()).addEntry(getFluid().getLocalizedName(new FluidStack(getFluid(), 0)) + ";none;You found it on the " + world + TextFormatting.WHITE + ". Natural from the " + natural, stack);
+			}
+			else
+			{
+				ItemStack item = FeedRecipe.getItemStackFromFluid(getFluid());
+				((FluidMooCatalogue)stack.getItem()).addEntry(getFluid().getLocalizedName(new FluidStack(getFluid(), 0)) + ";none;Made by feeding a Fluid Moo with " + TextFormatting.GOLD + item.getDisplayName(), stack);
+			}
 			return false;
 		}
 
 		if (stack.getItem() == ItemManager.demonSoul)  
 		{
-			if (stats.getEfficiency() >= Config.maxEfficiency && Config.maxEfficiency > 0)
+			if (getEfficiency() >= Config.maxEfficiency && Config.maxEfficiency > 0)
 				return false;
 
 			player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
 
-			stats.setEfficiency(stats.getEfficiency() + 1);
+			setEfficiency(getEfficiency() + 1);
 			player.swingArm(hand);
 
 			if (!player.capabilities.isCreativeMode)
 			{
-				setDelay(MathHelper.ceiling_double_int(Config.maxUseDelay / stats.getEfficiency()));
+				setDelay(MathHelper.ceiling_double_int(Config.maxUseDelay / getEfficiency()));
 
 				if (stack.stackSize > 1)
 					player.setHeldItem(hand, new ItemStack(stack.getItem(), --stack.stackSize));
@@ -253,20 +339,20 @@ public class EntityFluidMoo extends EntityMiniMoo
 
 		if (stack.getItem() == ItemManager.goldenEssence)  
 		{
-			if (stats.getQuantity() >= Config.maxQuantity && Config.maxQuantity > 0)
+			if (getQuantity() >= Config.maxQuantity && Config.maxQuantity > 0)
 				return false;
 
 			player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
 
-			stats.setQuantity(stats.getQuantity() + 1);
+			setQuantity(getQuantity() + 1);
 			player.swingArm(hand);
-			
+
 			if (getDelay() <= 0)
-				stats.setBuckets(stats.getQuantity());
+				setBuckets(getQuantity());
 
 			if (!player.capabilities.isCreativeMode)
 			{
-				setDelay(MathHelper.ceiling_double_int(Config.maxUseDelay / stats.getEfficiency()));
+				setDelay(MathHelper.ceiling_double_int(Config.maxUseDelay / getEfficiency()));
 
 				if (stack.stackSize > 1)
 					player.setHeldItem(hand, new ItemStack(stack.getItem(), --stack.stackSize));
@@ -286,7 +372,7 @@ public class EntityFluidMoo extends EntityMiniMoo
 
 			if (!player.capabilities.isCreativeMode)
 			{
-				setDelay(MathHelper.ceiling_double_int(Config.maxUseDelay / stats.getEfficiency()));
+				setDelay(MathHelper.ceiling_double_int(Config.maxUseDelay / getEfficiency()));
 
 				if (stack.stackSize > 1)
 					player.setHeldItem(hand, new ItemStack(stack.getItem(), --stack.stackSize));
@@ -296,7 +382,7 @@ public class EntityFluidMoo extends EntityMiniMoo
 
 			return true;
 		}
-		
+
 		if (isBreedingItem(stack) && Config.allowBreeding)
 		{
 			if (isInLove() || getGrowingAge() < 0)
@@ -324,9 +410,9 @@ public class EntityFluidMoo extends EntityMiniMoo
 			{
 				if (!player.capabilities.isCreativeMode)
 				{
-					if (stats.getBuckets() <= 1)
+					if (getBuckets() <= 1)
 					{
-						setDelay(MathHelper.ceiling_double_int(Config.maxUseDelay / stats.getEfficiency()));
+						setDelay(MathHelper.ceiling_double_int(Config.maxUseDelay / getEfficiency()));
 						decreaseBuckets();
 					}
 					else
@@ -341,7 +427,7 @@ public class EntityFluidMoo extends EntityMiniMoo
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -349,11 +435,11 @@ public class EntityFluidMoo extends EntityMiniMoo
 	{
 		if (FluidRegistry.isUniversalBucketEnabled())
 		{
-			ItemStack result = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, fluid);
+			ItemStack result = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, getFluid());
 
 			if (result.getDisplayName().equals("Universal Bucket") || result.getDisplayName().equals("Bucket"))
 				return;
-			
+
 			if (stack.stackSize > 1)
 			{
 				player.setHeldItem(hand, new ItemStack(stack.getItem(), --stack.stackSize));
@@ -364,6 +450,13 @@ public class EntityFluidMoo extends EntityMiniMoo
 			else
 				player.setHeldItem(hand, result.copy());
 		}
+	}
+	
+	private boolean validItem(ItemStack stack)
+	{
+		return FeedRecipe.recipes.containsKey(stack.getItem()) || stack.getItem() == ItemManager.mooCatalogue || stack.getItem() == ItemManager.demonSoul || 
+				stack.getItem() == ItemManager.goldenEssence || stack.getItem() == Items.GOLDEN_APPLE || isBreedingItem(stack) || stack.getItem() == Items.BUCKET || 
+				stack.getItem() == ForgeModContainer.getInstance().universalBucket;
 	}
 
 	// MATING
@@ -388,7 +481,9 @@ public class EntityFluidMoo extends EntityMiniMoo
 			{
 				if (entityAnimal instanceof EntityFluidMoo) 
 				{
-					BreedRecipe recipe = BreedRecipe.canMateMoos(this, ((EntityFluidMoo) entityAnimal));
+					EntityFluidMoo another = ((EntityFluidMoo) entityAnimal);
+					
+					BreedRecipe recipe = BreedRecipe.canMateMoos(this, another);
 					if (recipe != null) 
 					{
 						resultFluid = recipe.resultFluid;
@@ -396,9 +491,26 @@ public class EntityFluidMoo extends EntityMiniMoo
 					}
 					else
 					{
-						resetInLove();
-						entityAnimal.resetInLove();
-						return false;
+						if (getFluid().getName().equals(another.getFluid().getName()))
+						{
+							if (this.rand.nextInt(100) >= 50)
+							{
+								resultFluid = getFluid();
+								return true;
+							}
+							else
+							{
+								resetInLove();
+								entityAnimal.resetInLove();
+								return false;
+							}
+						}
+						else
+						{
+							resetInLove();
+							entityAnimal.resetInLove();
+							return false;
+						}
 					}
 				}
 			}
@@ -422,7 +534,7 @@ public class EntityFluidMoo extends EntityMiniMoo
 
 		return null;
 	}
-	
+
 	@Override
 	protected void onGrowingAdult()
 	{
@@ -466,53 +578,30 @@ public class EntityFluidMoo extends EntityMiniMoo
 
 	// NBTs & Spawn Data
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound)
+	public void writeEntityToNBT(NBTTagCompound comp)
 	{
-		NBTTagCompound comp = super.writeToNBT(compound);
-		stats.saveStats(comp);
-		return comp;
+		super.writeEntityToNBT(comp);
+		comp.setString(FLUID_NAME_ID, getFluid().getName());
+		comp.setInteger(BUCKET_AMOUNT_ID, getBuckets());
+		comp.setInteger(DELAY_ID, getDelay());
+		comp.setInteger(QUANTITY_ID, getQuantity());
+		comp.setInteger(EFFICIENCY_ID, getEfficiency());
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound)
+	public void readEntityFromNBT(NBTTagCompound compound)
 	{
-		super.readFromNBT(compound);
+		super.readEntityFromNBT(compound);
+
+		String fluidName = compound.getString(FLUID_NAME_ID);
 		
-		stats = new FluidMooStats();
+		if (!fluidName.equals("None"))
+			setFluid(FluidRegistry.getFluid(fluidName));
 		
-		stats.readStats(compound);
-
-		if (!stats.getFluidName().equals("None"))
-			setFluid(FluidRegistry.getFluid(stats.getFluidName()));
-	}
-
-	@Override
-	public void writeSpawnData(ByteBuf buffer) 
-	{
-		if (getFluid() == null)
-			setupFluid();
-		
-		ByteBufUtils.writeUTF8String(buffer, getFluid().getName());
-		ByteBufUtils.writeVarInt(buffer, stats.getDelay(), 4);
-		ByteBufUtils.writeVarInt(buffer, stats.getQuantity(), 4);
-		ByteBufUtils.writeVarInt(buffer, stats.getEfficiency(), 4);
-		ByteBufUtils.writeVarInt(buffer, stats.getBuckets(), 4);
-
-		super.writeSpawnData(buffer);
-	}
-
-	@Override
-	public void readSpawnData(ByteBuf additionalData) 
-	{		
-		stats = new FluidMooStats();
-		
-		setFluid(FluidRegistry.getFluid(ByteBufUtils.readUTF8String(additionalData)));
-		setDelay(ByteBufUtils.readVarInt(additionalData, 4));
-		stats.setQuantity(ByteBufUtils.readVarInt(additionalData, 4));
-		stats.setEfficiency(ByteBufUtils.readVarInt(additionalData, 4));
-		stats.setBuckets(ByteBufUtils.readVarInt(additionalData, 4));
-
-		super.readSpawnData(additionalData);
+		setQuantity(compound.getInteger(QUANTITY_ID));
+		setEfficiency(compound.getInteger(EFFICIENCY_ID));
+		setDelay(compound.getInteger(DELAY_ID));
+		setBuckets(compound.getInteger(BUCKET_AMOUNT_ID));
 	}
 
 	// MISC STUFF
@@ -527,36 +616,42 @@ public class EntityFluidMoo extends EntityMiniMoo
 	@Override
 	public Color getOverlayColor()
 	{
-		return FluidColorManager.getFluidColor(fluid);
+		return FluidColorManager.getFluidColor(getFluid());
 	}
 
 	@Override
 	public String getName()
 	{
-		return fluid.getLocalizedName(new FluidStack(fluid, 0)).replace("Molten ", "").replace("Liquid ", "") + " Mini Moo";
+		if (hasCustomName())
+			return getCustomNameTag();
+		
+		return getFluid().getLocalizedName(new FluidStack(getFluid(), 0)).replace("Molten ", "").replace("Liquid ", "") + " " + I18n.translateToLocal("entity.minimoos.fluidmoo.name");
 	}
-	
+
 	@Override
 	public boolean getCanSpawnHere()
 	{
 		if (GameruleManager.getGameRule(worldObj, "spawnMiniMoos").equals("false"))
 			return false;
-		
-		int i = MathHelper.floor_double(this.posX);
-        int j = MathHelper.floor_double(this.getEntityBoundingBox().minY);
-        int k = MathHelper.floor_double(this.posZ);
-        BlockPos blockpos = new BlockPos(i, j, k);
-        
-        IBlockState state = this.worldObj.getBlockState(blockpos.down());
 
-        if (this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox()) && this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !this.worldObj.containsAnyLiquid(this.getEntityBoundingBox()))
-        {
-	        if ((this.worldObj.provider instanceof WorldProviderHell && Config.getSpawnableFluids(Type.NETHER).length > 0) || (this.worldObj.provider instanceof WorldProviderEnd && Config.getSpawnableFluids(Type.END).length > 0))
-	        	return true;
-	        else
-	        	return state.getBlock() == Blocks.GRASS && this.worldObj.getLight(blockpos) > 8;
-        }
-        
-        return false;
+		int i = MathHelper.floor_double(this.posX);
+		int j = MathHelper.floor_double(this.getEntityBoundingBox().minY);
+		int k = MathHelper.floor_double(this.posZ);
+		BlockPos blockpos = new BlockPos(i, j, k);
+
+		IBlockState state = this.worldObj.getBlockState(blockpos.down());
+
+		if (this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox()) && this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !this.worldObj.containsAnyLiquid(this.getEntityBoundingBox()))
+		{
+			if (Config.getSpawnableFluids(this.worldObj.provider.getClass()).length > 0)
+				return false;
+
+			if ((this.worldObj.provider instanceof WorldProviderHell) || (this.worldObj.provider instanceof WorldProviderEnd))
+				return true;
+			else
+				return state.getBlock() == Blocks.GRASS && this.worldObj.getLight(blockpos) > 8;
+		}
+
+		return false;
 	}
 }

@@ -1,0 +1,33 @@
+{
+  "pools": [
+    {
+      "name": "main",
+	  "conditions": [
+		{
+			"condition": "minecraft:random_chance",
+			"chance": 0.75
+		}
+	  ],
+      "entries": [
+        {
+          "entryName": "minecraft:slime_ball",
+          "weight": 1,
+          "quality": 0,
+          "type": "item",
+          "functions": [
+            {
+              "count": 2.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "count": 2.0,
+              "function": "minecraft:looting_enchant"
+            }
+          ],
+          "name": "minecraft:slime_ball"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

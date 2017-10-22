@@ -2,6 +2,7 @@ package com.ricardothecoder.minimoos.addons.tconstruct;
 
 import java.util.ArrayList;
 
+import com.ricardothecoder.minimoos.Config;
 import com.ricardothecoder.minimoos.entities.EntityFluidMoo;
 
 import net.minecraftforge.fluids.Fluid;
@@ -32,6 +33,9 @@ public class BreedRecipe
 	
 	public static BreedRecipe canMateMoos(EntityFluidMoo male, EntityFluidMoo female)
 	{
+		if (!Config.allowAlloyBreeding)
+			return null;
+		
 		for (BreedRecipe recipe : recipes)
 		{
 			if (recipe.containsFluid(male.getFluid()) && recipe.containsFluid(female.getFluid()) && !male.getFluid().getUnlocalizedName().equals(female.getFluid().getUnlocalizedName()))

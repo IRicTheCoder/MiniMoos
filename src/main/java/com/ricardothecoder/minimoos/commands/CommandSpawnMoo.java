@@ -8,7 +8,6 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.ricardothecoder.minimoos.entities.EntityFluidMoo;
-import com.ricardothecoder.minimoos.entities.stats.FluidMooStats;
 import com.ricardothecoder.yac.fluids.FluidManager;
 
 import net.minecraft.command.CommandBase;
@@ -16,17 +15,10 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.fluids.Fluid;
@@ -92,9 +84,11 @@ public class CommandSpawnMoo extends CommandBase
                 nbttagcompound.setString("id", "minimoos.fluidmoo");
                 nbttagcompound.setBoolean("isFool", false);
                 
-                FluidMooStats stats = new FluidMooStats();
-                stats.setFluidName(s);
-                stats.saveStats(nbttagcompound);
+                nbttagcompound.setString(EntityFluidMoo.FLUID_NAME_ID, s);
+                nbttagcompound.setInteger(EntityFluidMoo.BUCKET_AMOUNT_ID, 1);
+                nbttagcompound.setInteger(EntityFluidMoo.DELAY_ID, 0);
+        		nbttagcompound.setInteger(EntityFluidMoo.QUANTITY_ID, 1);
+        		nbttagcompound.setInteger(EntityFluidMoo.EFFICIENCY_ID, 1);
                 
                 Entity entity = AnvilChunkLoader.readWorldEntityPos(nbttagcompound, world, d0, d1, d2, true);
 

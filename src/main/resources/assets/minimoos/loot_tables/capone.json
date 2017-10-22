@@ -1,0 +1,27 @@
+{
+  "pools": [
+    {
+      "name": "main",
+      "entries": [
+        {
+          "entryName": "minecraft:beef",
+          "weight": 1,
+          "quality": 0,
+          "type": "item",
+          "functions": [
+            {
+              "count": 64.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "function": "minecraft:set_nbt",
+			  "tag": "{display:{Lore:[\"I am like any other man. All I do is supply a demand.\"]}}"
+            }
+          ],
+          "name": "minecraft:beef"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}
