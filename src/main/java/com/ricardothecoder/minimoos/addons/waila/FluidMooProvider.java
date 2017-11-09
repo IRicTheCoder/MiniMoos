@@ -41,7 +41,7 @@ public class FluidMooProvider implements IWailaEntityProvider
 			EntityFluidMoo fluidMoo = (EntityFluidMoo) accessor.getEntity();
 			FluidStack fluidStack = new FluidStack(fluidMoo.getFluid(), 0);
 
-			currenttip.add(TextFormatting.AQUA + "Fluid: " + TextFormatting.WHITE + fluidMoo.getFluid().getLocalizedName(fluidStack) + " (" + fluidMoo.getBuckets() + ")");
+			currenttip.add(TextFormatting.AQUA + "Fluid: " + TextFormatting.WHITE + fluidMoo.getFluid().getLocalizedName(fluidStack) + TextFormatting.WHITE + " (" + fluidMoo.getBuckets() + ")");
 			currenttip.add(TextFormatting.AQUA + "Delay: " + TextFormatting.WHITE + formatTime(fluidMoo.getDelay()));
 			currenttip.add(TextFormatting.AQUA + "Quantity: " + TextFormatting.WHITE + "" + fluidMoo.getQuantity());
 			currenttip.add(TextFormatting.AQUA + "Efficiency: " + TextFormatting.WHITE + "" + fluidMoo.getEfficiency());

@@ -8,6 +8,7 @@ import com.ricardothecoder.minimoos.MiniMoos;
 import com.ricardothecoder.minimoos.References;
 import com.ricardothecoder.minimoos.addons.avaritia.AvaritiaPlugin;
 import com.ricardothecoder.minimoos.addons.hats.HatPlugin;
+import com.ricardothecoder.minimoos.addons.iskalliumreactor.IRPlugin;
 import com.ricardothecoder.minimoos.addons.mfr.MFRPlugin;
 import com.ricardothecoder.minimoos.addons.mfr.MooMessage;
 import com.ricardothecoder.minimoos.addons.moofluids.FluidCowConverter;
@@ -30,7 +31,7 @@ import com.ricardothecoder.minimoos.entities.bosses.EntityYakCapone;
 import com.ricardothecoder.minimoos.entities.halloween.EntityCostumeMoo;
 import com.ricardothecoder.minimoos.entities.halloween.EntitySpookyMoo;
 import com.ricardothecoder.minimoos.entities.halloween.EntityStatueMoo;
-import com.ricardothecoder.minimoos.feed.FeedRecipe;
+import com.ricardothecoder.minimoos.events.EventHandler;
 import com.ricardothecoder.minimoos.fluids.Fluids;
 import com.ricardothecoder.minimoos.items.ItemManager;
 import com.ricardothecoder.minimoos.loot.LootManager;
@@ -49,13 +50,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class CommonProxy
 {
 	private EntityInteractHandler interactHandler;
+	private EventHandler eventHandler;
 	
 	// REGISTER GAME RULES
 	// spawnMiniMoos - Prevents the spawn of Mini Moos
@@ -118,10 +119,7 @@ public class CommonProxy
 		GameRegistry.register(ItemManager.creativeMooCatalogue);
 		GameRegistry.register(ItemManager.forsakenFruit);
 		
-		if (Loader.isModLoaded("avaritia"))
-		{
-			Fluids.createFluids();
-		}
+		Fluids.createFluids();
 	}
 	
 	// REGISTER RECIPES
@@ -134,7 +132,8 @@ public class CommonProxy
 	// REGISTER SPAWNS
 	public void registerSpawns()
 	{
-		SpawnUtil.addSpawnByType(EntityFluidMoo.class, 8, 4, 4, EnumCreatureType.CREATURE, BiomeDictionary.Type.values());
+		//SpawnUtil.addSpawnByType(EntityFluidMoo.class, 8, 4, 4, EnumCreatureType.CREATURE, BiomeDictionary.Type.values());
+		SpawnUtil.addSpawnByType(EntityFluidMoo.class, 80, 4, 4, EnumCreatureType.CREATURE, BiomeDictionary.Type.values());
 		SpawnUtil.addSpawnByType(EntityForsakenMoo.class, Config.forsakenRate, 1, 2, EnumCreatureType.CREATURE, BiomeDictionary.Type.END);
 		SpawnUtil.addSpawnByType(EntityDemonMoo.class, Config.demonRate, 1, 2, EnumCreatureType.CREATURE, BiomeDictionary.Type.NETHER);
 		
@@ -195,6 +194,11 @@ public class CommonProxy
 			AvaritiaPlugin.init();
 		}
 		
+		if (Loader.isModLoaded("iskalliumreactors"))
+		{
+			IRPlugin.init();
+		}
+		
 		if (Loader.isModLoaded("hats"))
 		{
 			HatPlugin.init();
@@ -220,8 +224,10 @@ public class CommonProxy
 	public void registerEvents() 
 	{ 
 		interactHandler = new EntityInteractHandler();
+		eventHandler = new EventHandler();
 		
 		MinecraftForge.EVENT_BUS.register(interactHandler);
+		MinecraftForge.EVENT_BUS.register(eventHandler);
 	}
 	
 	// UNUSED ON THE COMMON SIDE

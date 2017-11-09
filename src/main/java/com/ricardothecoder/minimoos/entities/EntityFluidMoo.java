@@ -16,6 +16,7 @@ import com.ricardothecoder.minimoos.items.ItemManager;
 import com.ricardothecoder.yac.util.ModLogger;
 import com.ricardothecoder.yac.world.GameruleManager;
 
+import net.minecraft.block.BlockGrass;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
@@ -197,8 +198,8 @@ public class EntityFluidMoo extends EntityMiniMoo
 	{
 		if (getFluid() == null)
 		{
-			int fluidID = this.rand.nextInt(Config.getSpawnableFluids(this.worldObj.provider.getDimensionType()).length);
-			Fluid fluid = Config.getSpawnableFluids(this.worldObj.provider.getDimensionType())[fluidID];
+			int fluidID = this.rand.nextInt(Config.getSpawnableFluids(Config.getRelativeType(this.worldObj.provider)).length);
+			Fluid fluid = Config.getSpawnableFluids(Config.getRelativeType(this.worldObj.provider))[fluidID];
 
 			setFluid(fluid);
 			configureMoo();
@@ -209,6 +210,12 @@ public class EntityFluidMoo extends EntityMiniMoo
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack)
 	{
+		if (getFluid() == null)
+			return false;
+		
+		if (stack == null)
+			return false;
+		
 		if (this.isChild())
 		{
 			if (isBreedingItem(stack) && Config.allowBreeding)
@@ -232,16 +239,13 @@ public class EntityFluidMoo extends EntityMiniMoo
 			return false;
 		}
 
-		if (stack == null)
-			return false;
-
 		if (this.isFool() && validItem(stack))
 		{
 			foolPlayer(player);
 			return true;
 		}
 
-		if (FeedRecipe.recipes.containsKey(stack.getItem()))
+		if (FeedRecipe.recipes.containsKey(stack.getItem()) && !worldObj.isRemote)
 		{
 			FeedRecipe recipe = FeedRecipe.recipes.get(stack.getItem());
 
@@ -618,7 +622,10 @@ public class EntityFluidMoo extends EntityMiniMoo
 		if (hasCustomName())
 			return getCustomNameTag();
 		
-		return getFluid().getLocalizedName(new FluidStack(getFluid(), 0)).replace("Molten ", "").replace("Liquid ", "") + " " + I18n.translateToLocal("entity.minimoos.fluidmoo.name.extend");
+		if (getFluid() == null)
+			return "INVALID FLUID - " + this.dataManager.get(FLUID_NAME).toString();
+			
+		return getFluid().getLocalizedName(new FluidStack(getFluid(), 0)).replace("Molten ", "").replace("Liquid ", "") + " " + TextFormatting.WHITE + I18n.translateToLocal("entity.minimoos.fluidmoo.name.extend");
 	}
 
 	@Override
@@ -636,13 +643,13 @@ public class EntityFluidMoo extends EntityMiniMoo
 
 		if (this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox()) && this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !this.worldObj.containsAnyLiquid(this.getEntityBoundingBox()))
 		{
-			if (Config.getSpawnableFluids(this.worldObj.provider.getDimensionType()).length > 0)
+			if (Config.getSpawnableFluids(Config.getRelativeType(this.worldObj.provider)).length <= 0)
 				return false;
 
-			if ((this.worldObj.provider.getDimensionType() == DimensionType.NETHER) || (this.worldObj.provider.getDimensionType() == DimensionType.THE_END))
+			if (Config.getRelativeType(this.worldObj.provider) == DimensionType.NETHER || Config.getRelativeType(this.worldObj.provider) == DimensionType.THE_END)
 				return true;
 			else
-				return state.getBlock() == Blocks.GRASS && this.worldObj.getLight(blockpos) > 8;
+				return state.getBlock() instanceof BlockGrass && this.worldObj.getLight(blockpos) > 8;
 		}
 
 		return false;

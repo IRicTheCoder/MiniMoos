@@ -13,8 +13,8 @@ public class References
 	// Mod Information
 	public static final String MODID = "minimoos";
 	public static final String NAME = "MiniMoos";
-    public static final String VERSION = "1.3.2";
-    public static final int CFG_VERSION = 2;
+    public static final String VERSION = "1.4.1";
+    public static final int CFG_VERSION = 3;
     
     // Version Control & Dependencies
     public static final String ACCEPTED_VERSION = "[1.10,)";
@@ -75,6 +75,30 @@ public class References
     	fluidsNether.add("soularium");
     	fluidsNether.add("pulsatingiron");
     	fluidsNether.add("energeticalloy");
+    	fluidsNether.add("steel");
+    	fluidsNether.add("terrasteel");
+    	fluidsNether.add("tin");
+    	fluidsNether.add("silver");
+    	fluidsNether.add("mirion");
+    	fluidsNether.add("copper");
+    	fluidsNether.add("enderium");
+    	fluidsNether.add("lead");
+    	fluidsNether.add("brass");
+    	fluidsNether.add("aluminum");
+    	fluidsNether.add("electrum");
+    	fluidsNether.add("iridium");
+    	fluidsNether.add("platinum");
+    	fluidsNether.add("alubrass");
+    	fluidsNether.add("zinc");
+    	fluidsNether.add("signalum");
+    	fluidsNether.add("xu_demonic_metal");
+    	fluidsNether.add("bronze");
+    	fluidsNether.add("elementium");
+    	fluidsNether.add("invar");
+    	fluidsNether.add("manasteel");
+    	fluidsNether.add("nickel");
+    	fluidsNether.add("alumite");
+    	fluidsNether.add("lumium");
     	fluidMap.put(DimensionType.NETHER, fluidsNether);
     	
     	// END
@@ -88,6 +112,7 @@ public class References
     	fluidsEnd.add("cloud_seed_concentrated");
     	fluidsEnd.add("sacredwater");
     	fluidsEnd.add("nutrient_distillation");
+    	fluidsOver.add("hot_spring_water");
     	fluidMap.put(DimensionType.THE_END, fluidsEnd);
     }
 }

@@ -223,4 +223,10 @@ public class EntityMiniMoo extends EntityCow
 	{
 		return Color.WHITE;
 	}
+	
+	@Override
+	protected float getSoundPitch()
+	{
+		return this.isChild() ? (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 2.0F : (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.5F;
+	}
 }

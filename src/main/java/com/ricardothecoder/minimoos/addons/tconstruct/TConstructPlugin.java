@@ -5,6 +5,7 @@ import com.ricardothecoder.yac.util.ModLogger;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.smeltery.AlloyRecipe;
 
@@ -16,8 +17,7 @@ public class TConstructPlugin
 		
 		for (AlloyRecipe recipe : TinkerRegistry.getAlloys())
 		{
-			if (recipe.getFluids().size() <= 2)
-				AlloyManager.registerAlloy(recipe.getResult().getFluid(), recipe.getFluids().get(0).getFluid(), recipe.getFluids().get(1).getFluid());
+			AlloyManager.registerAlloy(recipe.getResult().getFluid(), recipe.getFluids().toArray(new FluidStack[0]));
 		}
 	}
 	

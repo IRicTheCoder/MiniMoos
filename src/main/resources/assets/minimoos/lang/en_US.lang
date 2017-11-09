@@ -30,6 +30,7 @@ item.moocatalogue.creative.name=Fluid Moo Catalogue - §6Creative Edition
 # FLUID NAMES
 fluid.mfr.milk.still.name.name=Milk
 fluid.neutronium=§8Liquified Neutronium§r
+fluid.iskallium=§aLiquid Iskallium§r
 
 # COMMANDS
 commands.spawnmoo.usage=/spawnmoo <fluidName> <x> <y> <z>

@@ -15,7 +15,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 
 
-version = "1.3.2-MC1.10.2"
+version = "1.4.1-MC1.10.2"
 group= "com.ricardothecoder.minimoos" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "MiniMoos"
 
@@ -74,6 +74,7 @@ dependencies {
 	provided files("_libs/TConstruct-1.10.2-2.6.5.jar")
 	provided files("_libs/Avaritia-1.10.2-2.2.7-universal.jar")
 	provided files("_libs/Hats-1.10.2-6.0.0.jar")
+	provided files("_libs/iskalliumreactors-1.10.2-0.3.9-beta.jar")
 
     // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
     // except that these dependencies get remapped to your current MCP mappings

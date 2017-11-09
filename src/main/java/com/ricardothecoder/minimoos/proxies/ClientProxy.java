@@ -59,7 +59,11 @@ public class ClientProxy extends CommonProxy
 			
 		});
 		
-		Fluids.blockLiquifiedNeutronium.render();
+		if (Fluids.blockLiquifiedNeutronium != null)
+			Fluids.blockLiquifiedNeutronium.render();
+		
+		if (Fluids.blockLiquidIskallium != null)
+			Fluids.blockLiquidIskallium.render();
 	}
 	
 	// REGISTER EVENTS

@@ -55,7 +55,6 @@ public class Config
 	// Tinkers' Contruct Addon
 	public static boolean allowAlloyBreeding = true;
 	public static boolean noAlloySpawn = false;
-	public static boolean allowEntityMelting = false;
 
 	// MineAddons Addon
 	public static boolean allowEntityConversion = true;
@@ -72,6 +71,9 @@ public class Config
 	
 	// Avaritia Addon
 	public static boolean allowAvaritiaExpansion = true;
+	
+	// Iskallium Reactor Addon
+	public static boolean allowIRExpansion = false;
 
 	// Fluid Control
 	private static boolean resetFluids = true;
@@ -116,6 +118,7 @@ public class Config
 			}	
 
 			configFile.delete();
+			load(configFile);
 		}
 		else
 		{	
@@ -123,12 +126,15 @@ public class Config
 
 			if (config.hasChanged())
 				config.save();
+			
+			load(configFile);
 
 			if (References.CFG_VERSION != verCheck)
+			{
 				configFile.delete();
+				load(configFile);
+			}
 		}
-
-		load(configFile);
 	}
 
 	public static void load(File configFile)
@@ -147,6 +153,7 @@ public class Config
 		if (Loader.isModLoaded("minefactoryreloaded")) config.setCategoryComment("Mine Factory Reloaded", "Configurations for the Mine Factory Reloaded integration");
 		if (Loader.isModLoaded("Waila")) config.setCategoryComment("Waila", "Configurations for the Waila integration");
 		if (Loader.isModLoaded("avaritia")) config.setCategoryComment("Avaritia", "Configurations for the Avaritia integration");
+		if (Loader.isModLoaded("iskalliumreactors")) config.setCategoryComment("Iskallium Reactors", "Configurations for the Iskallium Reactors integration");
 
 		// Do version check
 		verCheck = config.get("Version Check", "Version", References.CFG_VERSION, "Version of the Config").getInt();
@@ -177,7 +184,6 @@ public class Config
 		{
 			allowAlloyBreeding = config.get("Tinkers' Construct", "AllowAlloyBreeding", allowAlloyBreeding, "Should alloy breeding be allowed? [Default: true]").getBoolean();
 			noAlloySpawn = config.get("Tinkers' Construct", "NoAlloySpawn", noAlloySpawn, "Should alloy fluids be prevented from spawning? [Default: false]").getBoolean();
-			allowEntityMelting = config.get("Tinkers' Construct", "AllowEntityMelting", allowEntityMelting, "Should fluid moos melt into their fluid inside the smeltery? [Default: true]").getBoolean();
 		}
 
 		// Loading Mine Addons
@@ -206,6 +212,12 @@ public class Config
 		if (Loader.isModLoaded("avaritia"))
 		{
 			allowAvaritiaExpansion = config.get("Avaritia", "AllowAvaritiaExpansion", allowAvaritiaExpansion, "Should the avaritia expansion be enabled? [Default: true]").getBoolean();
+		}
+		
+		// Loading Iskallium Reactors
+		if (Loader.isModLoaded("iskalliumreactors"))
+		{
+			allowIRExpansion = config.get("Iskallium Reactors", "AllowIRExpansion", allowIRExpansion, "Should the iskallium reactors expansion be enabled? [Default: false]").getBoolean();
 		}
 
 		config.save();
@@ -343,6 +355,20 @@ public class Config
 			default:
 				return 4;
 		}
+	}
+	
+	public static DimensionType getRelativeType(WorldProvider current)
+	{
+		if (fluids.containsKey(current.getDimensionType()))
+			return current.getDimensionType(); 
+		
+		if (current instanceof WorldProviderHell)
+			return DimensionType.NETHER;
+		
+		if (current instanceof WorldProviderEnd)
+			return DimensionType.THE_END;
+		
+		return DimensionType.OVERWORLD;
 	}
 
 	public static Fluid[] getSpawnableFluids(DimensionType type)
