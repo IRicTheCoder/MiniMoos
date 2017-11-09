@@ -12,6 +12,7 @@
      - [ ] Mine Addons
      - [ ] Moo Fluids
      - [ ] Waila
+     - [ ] Avaritia
 - [ ] I also have other mods installed
 - [ ] I have searched for this issue previously and it was either (1) not previously reported, or (2) previously fixed and I'm having the same problem.
 - [ ] I am crashing and can provide my crash report(s)

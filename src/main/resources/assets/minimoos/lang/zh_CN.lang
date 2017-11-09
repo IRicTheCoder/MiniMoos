@@ -1,18 +1,71 @@
+# ENTITY NAMES
 entity.minimoos.fluidmoo.name=流体牛
+entity.minimoos.fluidmoo.name.extend=迷你牛
 entity.minimoos.foolmoo.name=傻瓜牛
 entity.minimoos.demonmoo.name=恶魔牛
 entity.minimoos.sacredmoo.name=神圣牛
 entity.minimoos.forsakenmoo.name=不朽牛
 
+entity.minimoos.boss.capone.name=§4Yak Capone
+entity.minimoos.boss.corleone.name=§4Veal Corleone
+entity.minimoos.boss.montana.name=§4Tony Mootana
+entity.minimoos.boss.barzini.name=§4Emilkio Barzini
+entity.minimoos.boss.costello.name=§4Frank Cattlello
+entity.minimoos.boss.scalda.name=§4Big Scalda
+
+entity.minimoos.halloween.spookymoo.name=§5幽灵牛
+entity.minimoos.halloween.costumemoo.name=§5时髦牛
+entity.minimoos.halloween.statuemoo.name=§5塑像牛
+entity.minimoos.halloween.statuemoo.sven.name=§5Svenieke Moo
+entity.minimoos.halloween.statuemoo.bysco.name=§5Bysco Moo
+
+# ITEM NAMES
 item.demonsoul.name=恶魔之魂
 item.goldenessence.name=金色精华
+item.forsakenfruit.name=§5不朽之果
 item.miniwheat.name=迷你小麦
 item.moocatalogue.name=流体牛目录
 item.moocatalogue.creative.name=流体牛目录 - §6创意版
 
+# FLUID NAMES
+fluid.mfr.milk.still.name.name=牛奶
+fluid.neutronium=§8液态0号元素§r
+
+# COMMANDS
 commands.spawnmoo.usage=/spawnmoo <fluidName> <x> <y> <z>
 commands.spawnmoo.failed=无法召唤牛实体
 commands.spawnmoo.outOfWorld=无法在一个未加载的区块中生成牛实体
 commands.spawnmoo.success=成功召唤牛实体
 
-fluid.mfr.milk.still.name.name=牛奶
+# TALKS
+talks.foolmoo.foolplayer=%s被一只小牛所愚弄！
+
+talks.bossmoo.capone.hat=你就是那个弄歪我帽子的男孩吗？你是个盲人吗？
+talks.bossmoo.capone.business=管好你的事情，我会记住你的男孩！
+talks.bossmoo.capone.protection=保护不是免费的%s！
+
+talks.bossmoo.corleone.what=你在做什么？我突然想打你。
+talks.bossmoo.corleone.nice=多好啊，%s！可是我并不喜欢。
+talks.bossmoo.corleone.thisday=又是美好的一天。
+
+talks.bossmoo.montana.finger=%s！你想要成为与我一样的人吗？现在，你只要伸出你那愚昧的手指指着我是个坏人！
+talks.bossmoo.montana.reload=我将重新开始！
+talks.bossmoo.montana.regeneration=我将给予你救赎！
+
+talks.bossmoo.barzini.alone=请别打扰我，%s！否则我会猎杀你！
+talks.bossmoo.barzini.johnny=Johnny在哪？出去，男孩！
+talks.bossmoo.barzini.right=这就是所谓的答案？%s！我想说它只值一分钱。
+
+talks.bossmoo.costello.cigar=是的，%s！！这是我的雪茄，而这里是你的？
+talks.bossmoo.costello.war=你想让战争从这里开始吗，%s？！？
+talks.bossmoo.costello.street=看看你，%s！你可以说什么都不是，你就是个业余的！
+
+talks.bossmoo.bigscalda.update=别烦我%s！我现在要更新FoolCraft！
+talks.bossmoo.bigscalda.issue=这只是另一个问题吗，%s？这看上去就已经是一万个问题了！
+talks.bossmoo.bigscalda.fix=我只是个驱壳，请你停下%s！
+talks.bossmoo.bigscalda.dead=拿着这个塑像，我走了！
+
+talks.spookymoo.moooh=哞！哞！哞
+
+talks.statuemoo.sven=Bysco，塑像可以使用南瓜进行制作吗？
+talks.statuemoo.bysco=是的，Sven！这也是吗？！？
