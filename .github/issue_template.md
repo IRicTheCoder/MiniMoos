@@ -13,6 +13,8 @@
      - [ ] Moo Fluids
      - [ ] Waila
      - [ ] Avaritia
+     - [ ] Twilight Forest
+     - [ ] Aether Legacy
 - [ ] I also have other mods installed
 - [ ] I have searched for this issue previously and it was either (1) not previously reported, or (2) previously fixed and I'm having the same problem.
 - [ ] I am crashing and can provide my crash report(s)
@@ -25,6 +27,7 @@
      - [ ] Java 8
 - [ ] Minecraft Version:
      - [ ] 1.10.2
+     - [ ] 1.12.2
 
 <!-- ISSUE DESCRIPTION - Please describe the issue in detail. -->
 <!-- If possible refer the Forge Version, the version of the mods refered in "I have mods that integrate with this installed" -->
